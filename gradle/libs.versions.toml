@@ -50,7 +50,7 @@ unitTests-junit = "junit:junit:4.13.2"
 uiTests-junitExt = "androidx.test.ext:junit:1.1.5"
 uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
 
-androidx-core-ktx = { group = "androidx.core:core-ktx", name = "core-ktx", version.ref = "coreKtxVer" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtxVer" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glideVer" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gsonVer" }
 material = { group = "com.google.android.material", name = "material", version.ref = "materialVer" }

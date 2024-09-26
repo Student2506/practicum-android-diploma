@@ -11,6 +11,23 @@ targetSdk = "33"
 detekt = "1.23.3"
 detektTwitterComposeRules ="0.0.26"
 
+coreKtxVer = "1.13.1"
+glideVer = "5.0.0-rc01"
+appCompatVer = "1.7.0"
+materialVer = "1.12.0"
+constraintLayoutVer = "2.1.4"
+gsonVer = "2.11.0"
+retrofitVer = "2.11.0"
+activtiyKtxVer = "1.9.2"
+kotlinDatetimeVer = "0.6.0"
+koinAndroidVer = "3.5.6"
+fragmentKtxVer = "1.8.3"
+viewpagerVer = "1.1.0"
+lifecycleVer = "2.8.6"
+navigationVer = "2.8.1"
+kotlinxcoroVer = "1.8.1"
+roomVer = "2.6.1"
+
 [libraries]
 
 # Detekt
@@ -23,12 +40,8 @@ staticAnalysis-detektLibraries = { module = "io.gitlab.arturbosch.detekt:detekt-
 staticAnalysis-detektTwitterComposeRules = { module = "com.twitter.compose.rules:detekt", version.ref = "detektTwitterComposeRules" }
 
 # AndroidX
-androidX-core = "androidx.core:core-ktx:1.12.0"
-androidX-appCompat = "androidx.appcompat:appcompat:1.6.1"
 
 # UI layer libraries
-ui-material = "com.google.android.material:material:1.10.0"
-ui-constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 
 # Unit tests
 unitTests-junit = "junit:junit:4.13.2"
@@ -36,5 +49,26 @@ unitTests-junit = "junit:junit:4.13.2"
 # UI tests
 uiTests-junitExt = "androidx.test.ext:junit:1.1.5"
 uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
+
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtxVer" }
+glide = { module = "com.github.bumptech.glide", name="glide", version.ref = "glideVer" }
+gson = { module = "com.google.code.gson", name="gson", version.ref = "gsonVer" }
+material = { group = "com.google.android.material", name = "material", version.ref = "materialVer" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompatVer" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintLayoutVer" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVer" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitVer" }
+activty-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activtiyKtxVer" }
+kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinDatetimeVer" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinAndroidVer" }
+fragemnt-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtxVer" }
+viewpager = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpagerVer" }
+lifecycle-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleVer"}
+lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleVer"}
+navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationVer"}
+navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationVer"}
+kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxcoroVer"}
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVer"}
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVer"}
 
 [bundles]

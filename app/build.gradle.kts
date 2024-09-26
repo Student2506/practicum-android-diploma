@@ -40,12 +40,12 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidX.core)
-    implementation(libs.androidX.appCompat)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.appcompat)
 
     // UI layer libraries
-    implementation(libs.ui.material)
-    implementation(libs.ui.constraintLayout)
+    implementation(libs.material)
+    implementation(libs.constraintlayout)
 
     // region Unit tests
     testImplementation(libs.unitTests.junit)

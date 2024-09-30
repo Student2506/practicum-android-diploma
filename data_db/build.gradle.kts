@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
-    id("kotlin-kapt")
+    alias(libs.plugins.room.plugin)
 
 }
 
@@ -34,6 +34,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
+}
+
+ksp {
+    arg("generateKotlin", "true")
 }
 
 dependencies {

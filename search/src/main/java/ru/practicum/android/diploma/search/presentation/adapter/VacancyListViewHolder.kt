@@ -28,7 +28,7 @@ class VacancyListViewHolder(parent: View) : RecyclerView.ViewHolder(parent) {
         vacancySalary.text = when {
             model.salaryMin != null && model.salaryMax != null -> {
                 itemView.context.getString(
-                    R.string.salary_from_to,
+                    ru.practicum.android.diploma.common_ui.R.string.salary_from_to,
                     model.salaryMin.toString(),
                     model.salaryMax.toString(),
                     model.salaryCurrency
@@ -36,19 +36,19 @@ class VacancyListViewHolder(parent: View) : RecyclerView.ViewHolder(parent) {
             }
             model.salaryMin != null -> {
                 itemView.context.getString(
-                    R.string.salary_from,
+                    ru.practicum.android.diploma.common_ui.R.string.salary_from,
                     model.salaryMin.toString(),
                     model.salaryCurrency
                 )
             }
             model.salaryMax != null -> {
                 itemView.context.getString(
-                    R.string.salary_to,
+                    ru.practicum.android.diploma.common_ui.R.string.salary_to,
                     model.salaryMax.toString(),
                     model.salaryCurrency
                 )
             }
-            else -> { itemView.context.getString(R.string.no_salary) }
+            else -> { itemView.context.getString(ru.practicum.android.diploma.common_ui.R.string.no_salary) }
         }
         Glide.with(itemView).load(model.companyLogo).placeholder(R.drawable.placeholder_logo_item_favorite).transform(
             CenterCrop(),

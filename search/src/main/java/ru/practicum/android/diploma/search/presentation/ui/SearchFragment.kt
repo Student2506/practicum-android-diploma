@@ -13,12 +13,17 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.search.R
 import ru.practicum.android.diploma.search.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.search.domain.models.Vacancy
 import ru.practicum.android.diploma.search.presentation.SearchScreenState
+import ru.practicum.android.diploma.search.presentation.adapter.VacancyListAdapter
 import ru.practicum.android.diploma.search.presentation.viewmodel.VacancyListState
 import ru.practicum.android.diploma.search.presentation.viewmodel.VacancyListViewModel
+import ru.practicum.android.diploma.vacancy.presentation.ui.VacancyFragment
+import ru.practicum.android.diploma.vacancy.presentation.ui.state.VacancyInputState
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
@@ -26,6 +31,14 @@ class SearchFragment : Fragment() {
     private var userInputReserve = ""
 
     private val searchFragmentViewModel: VacancyListViewModel by viewModel()
+    val adapter = VacancyListAdapter(object : VacancyListAdapter.VacancyClickListener {
+        override fun onVacancyClick(vacancy: Vacancy) {
+            findNavController().navigate(
+                R.id.action_searchFragment_to_vacancy_navigation,
+                VacancyFragment.createArgs(VacancyInputState.VacancyNetwork(vacancy.id))
+            )
+        }
+    })
 
     companion object {
         private const val USER_INPUT = "userInput"
@@ -70,11 +83,13 @@ class SearchFragment : Fragment() {
         searchFragmentViewModel.observeVacanciesState().observe(viewLifecycleOwner, Observer { state ->
             Log.d(TAG, state.toString())
             when (state) {
-                is VacancyListState.Content -> Log.d(TAG, "Fetched ${state.vacancies.size}")
+                is VacancyListState.Content -> {
+                    updateUI(SearchScreenState.VACANCY_LIST_LOADED(state.vacancies.size))
+                    adapter.setVacancies(ArrayList(state.vacancies))
+                }
+
                 else -> Log.d(TAG, "Something terrible had happened")
             }
-            Log.d(TAG, "Fetched any data")
-            updateUI(SearchScreenState.LOADING_NEW_LIST)
         })
 
         updateUI(SearchScreenState.IDLE)
@@ -85,6 +100,8 @@ class SearchFragment : Fragment() {
         binding.vacancyRecycler.setOnClickListener { // по оформлению адаптера - заменить на клик по item
             findNavController().navigate(R.id.action_searchFragment_to_vacancy_navigation)
         }
+        binding.vacancyRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.vacancyRecycler.adapter = adapter
     }
 
     private fun searchBarSetUp() {
@@ -103,11 +120,12 @@ class SearchFragment : Fragment() {
         }
 
         binding.searchBar.addTextChangedListener(
-            beforeTextChanged = {_, _, _, _ ->},
+            beforeTextChanged = { _, _, _, _ -> },
             onTextChanged = { charSequence, _, _, _ ->
+                updateUI(SearchScreenState.LOADING_NEW_LIST)
                 searchFragmentViewModel.searchVacancies(charSequence?.toString())
             },
-            afterTextChanged = {_ ->},
+            afterTextChanged = { _ -> },
         )
 
         binding.clearSearchIcon.setOnClickListener {
@@ -152,9 +170,9 @@ class SearchFragment : Fragment() {
                 binding.progressBarLoadingFromSearch.isVisible = true
             }
 
-            SearchScreenState.LOADING_NEW_PAGE -> {
+            is SearchScreenState.LOADING_NEW_PAGE -> {
                 binding.resultCountPopup.isVisible = true
-                // binding.resultCountPopup.text = "" добавить по наличии логики
+//                binding.resultCountPopup.text = "" Описать логику
                 binding.vacancyRecycler.isVisible = true
                 binding.progressBarLoadingNewPage.isVisible = true
             }
@@ -164,12 +182,13 @@ class SearchFragment : Fragment() {
                 binding.noInternetErrorText.isVisible = true
             }
 
-            SearchScreenState.VACANCY_LIST_LOADED -> {
+            is SearchScreenState.VACANCY_LIST_LOADED -> {
                 binding.resultCountPopup.isVisible = true
-                // binding.resultCountPopup.text = "" добавить по наличии логики
+                binding.resultCountPopup.text = requireActivity().resources.getQuantityString(
+                    R.plurals.search_screen_result_count_popup, state.vacanciesCount, state.vacanciesCount
+                )
                 binding.vacancyRecycler.isVisible = true
             }
         }
     }
-
 }

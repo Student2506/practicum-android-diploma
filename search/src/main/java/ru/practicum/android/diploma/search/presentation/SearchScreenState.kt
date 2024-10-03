@@ -11,5 +11,5 @@ sealed class SearchScreenState {
 
     data object FAILED_TO_FETCH_VACANCIES_ERROR : SearchScreenState()
 
-    data object VACANCY_LIST_LOADED : SearchScreenState()
+    data class VACANCY_LIST_LOADED(val vacanciesCount: Int) : SearchScreenState()
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.commonutils.debounce
 import ru.practicum.android.diploma.search.domain.models.Vacancy
@@ -20,12 +21,6 @@ class VacancyListViewModel(
         debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true, false) { changedText ->
             searchVacancies(changedText)
         }
-
-    val adapter = VacancyListAdapter(object : VacancyListAdapter.VacancyClickListener {
-        override fun onVacancyClick(vacancy: Vacancy) {
-            TODO("Not yet implemented")
-        }
-    })
 
     private val _vacanciesStateLiveData = MutableLiveData<VacancyListState>()
     fun observeVacanciesState(): LiveData<VacancyListState> = _vacanciesStateLiveData
@@ -51,7 +46,7 @@ class VacancyListViewModel(
         if (foundVacancies != null) {
             vacancies.clear()
             vacancies.addAll(foundVacancies)
-            adapter.setVacancies(vacancies)
+
         }
         when {
             !errorMessage.isNullOrEmpty() -> renderState(VacancyListState.Error(errorMessage))

@@ -14,9 +14,16 @@
 
     <!-- Search screen -->
     <string name="search_screen_header">Поиск вакансий</string>
-    <string name="search_screen_result_count_popup">Найдено %d вакансий</string>
     <string name="search_screen_no_results_popup">Таких вакансий нет</string>
     <string name="search_screen_searchbar_hint">Введите запрос</string>
+    <plurals name="search_screen_result_count_popup">
+        <item quantity="zero">Таких вакансий нет</item>
+        <item quantity="one">Найдена %d вакансия</item>
+        <item quantity="two">Найдено %d вакансии</item>
+        <item quantity="few">Найдено %d вакансии</item>
+        <item quantity="other">Найдено %d вакансий</item>
+        <item quantity="many">Найдено %d вакансий</item>
+    </plurals>
 
     <string name="search_screen_clear_button_content_description">Сбросить поисковой запрос</string>
 

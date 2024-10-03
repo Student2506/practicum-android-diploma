@@ -2,34 +2,42 @@ package ru.practicum.android.diploma.search.presentation.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.search.R
 import ru.practicum.android.diploma.search.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.presentation.SearchScreenState
+import ru.practicum.android.diploma.search.presentation.viewmodel.VacancyListState
+import ru.practicum.android.diploma.search.presentation.viewmodel.VacancyListViewModel
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private var userInputReserve = ""
 
-    // private val searchFragmentViewModel: SearchFragmentViewModel by viewModel() //ждёт VM
+    private val searchFragmentViewModel: VacancyListViewModel by viewModel()
 
     companion object {
         private const val USER_INPUT = "userInput"
+        private const val TAG = "SearchFragment"
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
@@ -59,11 +67,17 @@ class SearchFragment : Fragment() {
 
         searchBarSetUp()
 
-        // searchFragmentViewModel.stateLiveData.observe(viewLifecycleOwner, Observer { // ждёт VM
-        //    state -> updateUI(state)
-        // })
+        searchFragmentViewModel.observeVacanciesState().observe(viewLifecycleOwner, Observer { state ->
+            Log.d(TAG, state.toString())
+            when (state) {
+                is VacancyListState.Content -> Log.d(TAG, "Fetched ${state.vacancies.size}")
+                else -> Log.d(TAG, "Something terrible had happened")
+            }
+            Log.d(TAG, "Fetched any data")
+            updateUI(SearchScreenState.LOADING_NEW_LIST)
+        })
 
-        updateUI(SearchScreenState.IDLE) // чтобы не ругался detekt, по наличию VM удалим
+        updateUI(SearchScreenState.IDLE)
 
         binding.filter.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_filterFragment)
@@ -88,16 +102,24 @@ class SearchFragment : Fragment() {
             userInputReserve = text.toString()
         }
 
+        binding.searchBar.addTextChangedListener(
+            beforeTextChanged = {_, _, _, _ ->},
+            onTextChanged = { charSequence, _, _, _ ->
+                searchFragmentViewModel.searchVacancies(charSequence?.toString())
+            },
+            afterTextChanged = {_ ->},
+        )
+
         binding.clearSearchIcon.setOnClickListener {
             binding.searchBar.text.clear()
             val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(
-                binding.searchBar.windowToken,
-                0
+                binding.searchBar.windowToken, 0
             )
 
         }
     }
+
 
     private fun disableAllVariableViews() {
         binding.defaultIllustration.isVisible = false

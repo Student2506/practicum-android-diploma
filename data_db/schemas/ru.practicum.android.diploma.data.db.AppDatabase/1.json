@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "aec879b707a9d86407c35e2cc3e6f63d",
+    "identityHash": "8cd6d181dc55ba6553023552fe25c893",
     "entities": [
       {
         "tableName": "vacancy_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id_vacancy` INTEGER NOT NULL, `name_vacancy` TEXT NOT NULL, `salary` TEXT NOT NULL, `nameCompany` TEXT NOT NULL, `location` TEXT NOT NULL, `experience` TEXT NOT NULL, `employment` TEXT NOT NULL, `description` TEXT NOT NULL, `url_logo` TEXT, `date_add_vacancy` INTEGER NOT NULL, PRIMARY KEY(`id_vacancy`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id_vacancy` INTEGER NOT NULL, `name_vacancy` TEXT NOT NULL, `salary` TEXT NOT NULL, `name_company` TEXT NOT NULL, `location` TEXT NOT NULL, `experience` TEXT NOT NULL, `employment` TEXT NOT NULL, `description` TEXT NOT NULL, `url_logo` TEXT, `date_add_vacancy` INTEGER NOT NULL, PRIMARY KEY(`id_vacancy`))",
         "fields": [
           {
             "fieldPath": "idVacancy",
@@ -28,7 +28,7 @@
           },
           {
             "fieldPath": "nameCompany",
-            "columnName": "nameCompany",
+            "columnName": "name_company",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -82,7 +82,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aec879b707a9d86407c35e2cc3e6f63d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8cd6d181dc55ba6553023552fe25c893')"
     ]
   }
 }

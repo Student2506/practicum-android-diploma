@@ -45,7 +45,6 @@ class SearchFragment : Fragment() {
         private const val TAG = "SearchFragment"
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -131,13 +130,9 @@ class SearchFragment : Fragment() {
         binding.clearSearchIcon.setOnClickListener {
             binding.searchBar.text.clear()
             val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(
-                binding.searchBar.windowToken, 0
-            )
-
+            imm.hideSoftInputFromWindow(binding.searchBar.windowToken, 0)
         }
     }
-
 
     private fun disableAllVariableViews() {
         binding.defaultIllustration.isVisible = false
@@ -156,8 +151,9 @@ class SearchFragment : Fragment() {
         when (state) {
             SearchScreenState.FAILED_TO_FETCH_VACANCIES_ERROR -> {
                 binding.resultCountPopup.isVisible = true
-//                binding.resultCountPopup.text =
-//                    getString(ru.practicum.android.diploma.common_ui.R.string.search_screen_no_results_popup)
+                binding.resultCountPopup.text = requireActivity().resources.getQuantityString(
+                    R.plurals.search_screen_result_count_popup, 0, 0
+                )
                 binding.failedToFetchListErrorIllustration.isVisible = true
                 binding.failedToFetchListErrorText.isVisible = true
             }

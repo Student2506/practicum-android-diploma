@@ -4,12 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.commonutils.debounce
 import ru.practicum.android.diploma.search.domain.models.Vacancy
 import ru.practicum.android.diploma.search.domain.usecase.VacanciesInteractor
-import ru.practicum.android.diploma.search.presentation.adapter.VacancyListAdapter
 
 class VacancyListViewModel(
     private val vacanciesInteractor: VacanciesInteractor,

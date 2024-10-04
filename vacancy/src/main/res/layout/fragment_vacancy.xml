@@ -242,7 +242,7 @@
             </LinearLayout>
 
             <ProgressBar
-                android:id="@+id/progressbar_track"
+                android:id="@+id/progressbar"
                 android:layout_width="@dimen/progressBar"
                 android:layout_height="@dimen/progressBar"
                 android:indeterminateTint="@color/blue"

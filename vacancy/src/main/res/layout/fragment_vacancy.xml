@@ -90,12 +90,6 @@
 
                     <TextView
                         android:id="@+id/vacancyCompany"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/vacancyCardPadding"
-                        android:layout_marginTop="@dimen/vacancyTextPadding"
-                        android:padding="@dimen/noPadding"
-                        android:textColor="@color/black"
                         style="@style/CompanyNameText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -103,11 +97,6 @@
 
                     <TextView
                         android:id="@+id/vacancyCity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/vacancyCardPadding"
-                        android:padding="@dimen/noPadding"
-                        android:textColor="@color/black"
                         style="@style/VacancyCity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -212,9 +201,9 @@
                 android:id="@+id/vacancyServerError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="208dp"
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp"
+                android:paddingTop="208dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

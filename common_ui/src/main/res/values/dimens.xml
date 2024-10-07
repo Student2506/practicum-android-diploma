@@ -21,4 +21,5 @@
     <dimen name="textSizeLittle">16sp</dimen>
     <dimen name="vacancyPadding">9dp</dimen>
     <dimen name="vacancyMargin">72dp</dimen>
+    <dimen name="dimen_15">15dp</dimen>
 </resources>

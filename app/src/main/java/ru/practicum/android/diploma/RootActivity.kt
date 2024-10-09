@@ -32,6 +32,7 @@ class RootActivity : AppCompatActivity() {
                     binding.bottomNavigationMenu.isVisible = true
                     binding.navigationPanelDivider.isVisible = true
                 }
+
                 else -> {
                     binding.bottomNavigationMenu.isVisible = false
                     binding.navigationPanelDivider.isVisible = false
@@ -53,6 +54,10 @@ class RootActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        private const val TAG = "RootActivity"
     }
 
 }

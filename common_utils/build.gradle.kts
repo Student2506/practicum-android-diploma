@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("kotlin-parcelize")
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -44,4 +44,8 @@ dependencies {
     testImplementation(libs.unitTests.junit)
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
+
+    implementation(libs.kotlinx.coroutines.android)
+
+    implementation(project(":common_ui"))
 }

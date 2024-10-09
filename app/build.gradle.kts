@@ -74,5 +74,6 @@ dependencies {
     implementation(project(":data_db"))
     implementation(project(":search"))
     implementation(project(":favorites"))
+    implementation(project(":vacancy"))
     implementation(project(":team"))
 }

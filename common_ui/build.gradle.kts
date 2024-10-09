@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.practicum.android.diploma.common_ui"
+    namespace = "ru.practicum.android.diploma.ui"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -29,6 +29,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 

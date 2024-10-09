@@ -1,8 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("kotlin-parcelize")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.ksp)
+    id("kotlin-kapt")
 }
 
 android {
@@ -32,6 +33,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
+        correctErrorTypes = true
+        useBuildCache = true
+    }
 }
 
 dependencies {
@@ -44,28 +52,19 @@ dependencies {
     androidTestImplementation(libs.uiTests.espressoCore)
 
     // Add lib
-    implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    implementation(libs.glide)
     annotationProcessor(libs.compiler)
     implementation(libs.logging.interceptor)
     implementation(libs.gson)
+    implementation(libs.koin.core)
     implementation(libs.koin.android)
-    implementation(libs.androidX.core)
-    implementation(libs.androidX.appCompat)
-    implementation(libs.ui.material)
-    implementation(libs.retrofit)
-    implementation(libs.koin.android)
-    implementation(libs.converter.gson)
 
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
     // modules
     implementation(project(":common_utils"))
-    implementation(project(":search"))
-    implementation(project(":favorites"))
 }

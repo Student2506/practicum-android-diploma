@@ -13,9 +13,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.commonutils.Utils.closeKeyBoard
 import ru.practicum.android.diploma.commonutils.debounce
+import ru.practicum.android.diploma.commonutils.state.VacancyInputState
 import ru.practicum.android.diploma.search.R
 import ru.practicum.android.diploma.search.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.models.Vacancy
@@ -23,8 +25,7 @@ import ru.practicum.android.diploma.search.presentation.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.adapter.VacancyListAdapter
 import ru.practicum.android.diploma.search.presentation.viewmodel.VacancyListState
 import ru.practicum.android.diploma.search.presentation.viewmodel.VacancyListViewModel
-import ru.practicum.android.diploma.vacancy.presentation.ui.VacancyFragment
-import ru.practicum.android.diploma.vacancy.presentation.ui.state.VacancyInputState
+import ru.ptacticum.android.diploma.vacancyapi.VacancyApi
 
 private const val USER_INPUT = "userInput"
 private const val DELAY_CLICK_VACANCY = 2000L
@@ -35,6 +36,8 @@ internal class SearchFragment : Fragment() {
     private var userInputReserve = ""
 
     private val vacancyListViewModel: VacancyListViewModel by viewModel()
+    private val vacancyApi: VacancyApi by inject()
+
     private var localVacancyList: ArrayList<Vacancy> = ArrayList()
 
     val debouncedSearch by lazy {
@@ -121,10 +124,16 @@ internal class SearchFragment : Fragment() {
     }
 
     private fun recyclerSetup() {
+//        val adapter = VacancyListAdapter { vacancy ->
+//            findNavController().navigate(
+//                R.id.action_searchFragment_to_vacancy_navigation,
+//                VacancyFragment.createArgs(VacancyInputState.VacancyNetwork(vacancy.id))
+//            )
+//        }
         val adapter = VacancyListAdapter { vacancy ->
             findNavController().navigate(
                 R.id.action_searchFragment_to_vacancy_navigation,
-                VacancyFragment.createArgs(VacancyInputState.VacancyNetwork(vacancy.id))
+                vacancyApi.createArgs(VacancyInputState.VacancyNetwork(vacancy.id))
             )
         }
         binding.vacancyRecycler.layoutManager = GridLayoutManager(requireContext(), 1)

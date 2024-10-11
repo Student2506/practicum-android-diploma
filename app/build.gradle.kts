@@ -62,13 +62,15 @@ dependencies {
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.dynamic.features.fragment)
     implementation(libs.androidx.fragment.ktx)
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(project(":common-ui"))
+
 
     // modules
+    implementation(project(":common-ui"))
     implementation(project(":data-network"))
     implementation(project(":data-sp"))
     implementation(project(":data-db"))
@@ -76,5 +78,6 @@ dependencies {
     implementation(project(":feature-filter"))
     implementation(project(":feature-favorites"))
     implementation(project(":feature-vacancy"))
+    implementation(project(":feature-vacancy-api"))
     implementation(project(":feature-team"))
 }

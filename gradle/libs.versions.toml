@@ -31,6 +31,7 @@ kapt = "1.8.0"
 [libraries]
 
 # Detekt
+androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigationFragmentKtx" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinAndroid" }
 staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 staticAnalysis-detektCli = { module = "io.gitlab.arturbosch.detekt:detekt-cli", version.ref = "detekt" }

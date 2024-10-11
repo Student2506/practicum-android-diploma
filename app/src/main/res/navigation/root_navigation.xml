@@ -8,5 +8,9 @@
     <include app:graph="@navigation/team_navigation" />
     <include app:graph="@navigation/favorites_navigation" />
 
+<!--    <include-dynamic android:id="@+id/vacancyFragment"-->
+<!--        app:moduleName="featurevacancy"-->
+<!--        app:graphResName="vacancy_navigation"-->
+<!--        app:graphPackage="ru.practicum.android.diploma.vacancy.presentation.ui.VacancyFragment"/>-->
 
 </navigation>

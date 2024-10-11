@@ -7,6 +7,7 @@
     tools:context=".RootActivity">
 
     <!-- Fragment container -->
+<!--    android:name="androidx.navigation.dynamicfeatures.fragment.DynamicNavHostFragment-->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/rootFragments"
         android:name="androidx.navigation.fragment.NavHostFragment"

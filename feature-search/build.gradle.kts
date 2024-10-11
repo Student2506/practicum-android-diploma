@@ -54,6 +54,7 @@ dependencies {
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.dynamic.features.fragment)
     implementation(libs.androidx.fragment.ktx)
 
     implementation(libs.kotlinx.coroutines.android)
@@ -62,7 +63,7 @@ dependencies {
 
     // modules
     implementation(project(":common-utils"))
-    implementation(project(":feature-vacancy"))
+    implementation(project(":feature-vacancy-api"))
     implementation(project(":feature-filter"))
     implementation(project(":data-network"))
     implementation(project(":data-sp"))

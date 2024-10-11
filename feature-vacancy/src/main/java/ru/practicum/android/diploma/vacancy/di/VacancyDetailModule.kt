@@ -8,7 +8,9 @@ import ru.practicum.android.diploma.vacancy.data.repositoryimpl.VacancyDetailRep
 import ru.practicum.android.diploma.vacancy.domain.repository.VacancyDetailRepository
 import ru.practicum.android.diploma.vacancy.domain.usecase.VacancyDetailInteractor
 import ru.practicum.android.diploma.vacancy.domain.usecase.impl.VacancyDetailInteractorImpl
+import ru.practicum.android.diploma.vacancy.presentation.VacancyImpl
 import ru.practicum.android.diploma.vacancy.presentation.viewmodel.VacancyDetailViewModel
+import ru.ptacticum.android.diploma.vacancyapi.VacancyApi
 
 val vacancyDetailModule = module {
 
@@ -24,4 +26,8 @@ val vacancyDetailModule = module {
         VacancyDetailRepositoryImpl(androidContext(), get(), get(), get())
     }
     single { ExternalNavigator(androidContext()) }
+
+    single<VacancyApi> {
+        VacancyImpl()
+    }
 }

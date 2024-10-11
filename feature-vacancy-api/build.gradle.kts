@@ -1,12 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.kapt)
 }
 
 android {
-    namespace = "ru.practicum.android.diploma.favorites"
+    namespace = "ru.ptacticum.android.diploma.vacancyapi"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -32,13 +30,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        viewBinding = true
-    }
-    kapt {
-        correctErrorTypes = true
-        useBuildCache = true
-    }
 }
 
 dependencies {
@@ -51,30 +42,12 @@ dependencies {
     androidTestImplementation(libs.uiTests.espressoCore)
 
     // Add lib
-    implementation(libs.converter.gson)
-    implementation(libs.glide)
-    annotationProcessor(libs.compiler)
-    implementation(libs.logging.interceptor)
-    implementation(libs.gson)
     implementation(libs.koin.android)
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-//    implementation(libs.androidx.navigation.dynamic.features.fragment)
     implementation(libs.androidx.fragment.ktx)
 
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-
-    implementation(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-
     // modules
-    implementation(project(":common-ui"))
     implementation(project(":common-utils"))
-    implementation(project(":feature-vacancy-api"))
-    implementation(project(":data-network"))
-    implementation(project(":data-sp"))
-    implementation(project(":data-db"))
 }

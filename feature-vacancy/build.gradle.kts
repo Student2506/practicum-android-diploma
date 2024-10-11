@@ -60,6 +60,7 @@ dependencies {
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+//    implementation(libs.androidx.navigation.dynamic.features.fragment)
     implementation(libs.androidx.fragment.ktx)
 
     implementation(libs.kotlinx.coroutines.android)
@@ -68,10 +69,11 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-    implementation(project(":common-ui"))
 
     // modules
+    implementation(project(":common-ui"))
     implementation(project(":common-utils"))
+    implementation(project(":feature-vacancy-api"))
     implementation(project(":data-network"))
     implementation(project(":data-sp"))
     implementation(project(":data-db"))

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -141,6 +140,7 @@ internal class PlaceFragment : Fragment() {
                 regionsCountriesViewModel.clearCache()
                 findNavController().navigateUp()
             }
+
             R.id.buttonBack -> {
                 regionsCountriesViewModel.mergeSettingsWithBufferDataInSp()
                 regionsCountriesViewModel.clearCache()

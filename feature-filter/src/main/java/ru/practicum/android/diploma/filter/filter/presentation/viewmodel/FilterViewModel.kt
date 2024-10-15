@@ -1,102 +1,54 @@
 package ru.practicum.android.diploma.filter.filter.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.filter.filter.domain.model.FilterSettingsModel
-import ru.practicum.android.diploma.filter.filter.domain.usecase.impl.FilterSPInteractor
-import ru.practicum.android.diploma.filter.industry.domain.model.IndustryModel
-import ru.practicum.android.diploma.filter.place.domain.model.Place
+import ru.practicum.android.diploma.filter.filter.domain.model.FilterSettings
+import ru.practicum.android.diploma.filter.filter.domain.usecase.FilterSPInteractor
 
 class FilterViewModel(
     private val filterSPInteractor: FilterSPInteractor
 ) : ViewModel() {
-    private var _filterOptionsListLiveData: MutableLiveData<FilterSettingsModel> =
-        MutableLiveData<FilterSettingsModel>()
-    val filterOptionsListLiveData: LiveData<FilterSettingsModel> = _filterOptionsListLiveData
+
+    private var _filterOptionsListLiveData: MutableLiveData<FilterSettings> = MutableLiveData<FilterSettings>()
+    val filterOptionsListLiveData: LiveData<FilterSettings> = _filterOptionsListLiveData
 
     init {
-        _filterOptionsListLiveData.value = FilterSettingsModel(null, null, null, null, false)
-        loadFilterSettings()
+        getDataFromSp()
     }
 
-    fun loadFilterSettings() {
-        viewModelScope.launch(Dispatchers.IO) { filterSPInteractor.getDataFilter().collect { value ->
-            _filterOptionsListLiveData.postValue(value)
-        } } }
-
-    fun clearIndustryFilter() {
+    private fun getDataFromSp() {
         viewModelScope.launch(Dispatchers.IO) {
-            filterSPInteractor.clearIndustryFilter()
+            val filterSettings = filterSPInteractor.getDataFilter()
+            _filterOptionsListLiveData.postValue(filterSettings)
         }
     }
 
-    fun clearPlaceFilter() {
+    fun setSalaryInDataFilter(salaryInDataFilter: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            filterSPInteractor.clearPlaceFilter()
+            filterSPInteractor.updateSalaryInDataFilter(salaryInDataFilter)
+            getDataFromSp()
         }
     }
 
-    fun clearSalaryFilter() {
+    fun setDoNotShowWithoutSalaryInDataFilter(doNotShowWithoutSalary: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            filterSPInteractor.clearSalaryFilter()
+            filterSPInteractor.updateDoNotShowWithoutSalaryInDataFilter(doNotShowWithoutSalary)
+            getDataFromSp()
         }
     }
 
-    fun isDoNotShowWithoutSalaryDataFilter() {
+    fun clearPlaceInDataFilter() {
         viewModelScope.launch(Dispatchers.IO) {
-            filterSPInteractor.isDoNotShowWithoutSalaryDataFilter()
+            filterSPInteractor.clearPlaceInDataFilter()
         }
     }
-
-    fun updatePlaceInDataFilter(place: Place) {
-        val currentFilterOptions=_filterOptionsListLiveData.value
-        if (currentFilterOptions != null) {
-            _filterOptionsListLiveData.value=currentFilterOptions.copy(region = place.nameRegion, country = place.nameCountry)
+    fun clearProfessionInDataFilter() {
+        viewModelScope.launch(Dispatchers.IO) {
+            filterSPInteractor.clearProfessionInDataFilter()
         }
-        viewModelScope.launch(Dispatchers.IO) { filterSPInteractor.updatePlaceInDataFilter(place).collect { value ->
-            if (value == -1) handleError()
-        } } }
-
-    fun updateProfessionInDataFilter(industryModel: IndustryModel) {
-        val currentFilterOptions=_filterOptionsListLiveData.value
-        if (currentFilterOptions != null) {
-            _filterOptionsListLiveData.value=currentFilterOptions.copy(industry = industryModel.name)
-        }
-        viewModelScope.launch(
-            Dispatchers.IO
-        ) { filterSPInteractor.updateProfessionInDataFilter(industryModel).collect { value ->
-            if (value == -1) handleError()
-        } } }
-
-    fun updateDoNotShowWithoutSalaryInDataFilter(switch: Boolean) {
-        val currentFilterOptions=_filterOptionsListLiveData.value
-        if (currentFilterOptions != null) {
-            _filterOptionsListLiveData.value=currentFilterOptions.copy(doNotShowWithoutSalary = switch)
-        }
-        viewModelScope.launch(
-            Dispatchers.IO
-        ) { filterSPInteractor.updateDoNotShowWithoutSalaryInDataFilter(switch).collect { value ->
-            if (value == -1) handleError()
-        } } }
-
-    fun updateSalaryInDataFilter(salaryExpectation: Int) {
-        val currentFilterOptions=_filterOptionsListLiveData.value
-        if (currentFilterOptions != null) {
-            _filterOptionsListLiveData.value=currentFilterOptions.copy(expectedSalary = salaryExpectation)
-        }
-        viewModelScope.launch(
-            Dispatchers.IO
-        ) { filterSPInteractor.updateSalaryInDataFilter(salaryExpectation).collect { value ->
-            if (value == -1) handleError()
-        } } }
-
-    private fun handleError() {
-        // no actions at the moment
     }
-
 }

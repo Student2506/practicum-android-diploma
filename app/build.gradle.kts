@@ -68,12 +68,15 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     // modules
-    implementation(project(":common_ui"))
-    implementation(project(":data_network"))
-    implementation(project(":data_sp"))
-    implementation(project(":data_db"))
-    implementation(project(":search"))
-    implementation(project(":favorites"))
-    implementation(project(":vacancy"))
-    implementation(project(":team"))
+    implementation(project(":common-ui"))
+    implementation(project(":common-navigate"))
+    implementation(project(":data-network"))
+    implementation(project(":data-sp"))
+    implementation(project(":data-db"))
+    implementation(project(":data-cache"))
+    implementation(project(":feature-search"))
+    implementation(project(":feature-filter"))
+    implementation(project(":feature-favorites"))
+    implementation(project(":feature-vacancy"))
+    implementation(project(":feature-team"))
 }

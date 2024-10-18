@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".presentation.ui.SearchFragment">
+
+    <!-- Guidelines -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topBarGuideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="64dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/searchBarGuideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/dp_140" />
+
+    <!-- Filter button -->
+    <ImageView
+        android:id="@+id/filter"
+        style="@style/FilterImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/topBarGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/search_vacancy"
+        style="@style/TextViewMedium22"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_4"
+        android:padding="0dp"
+        android:text="@string/search_screen_header"
+        app:layout_constraintEnd_toStartOf="@+id/filter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Search bar -->
+    <EditText
+        android:id="@+id/searchBar"
+        style="@style/SearchBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/dp_16"
+        android:layout_marginVertical="@dimen/dp_8"
+        android:autofillHints="no"
+        android:hint="@string/search_screen_searchbar_hint"
+        app:layout_constraintBottom_toTopOf="@id/searchBarGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBarGuideline" />
+
+    <!-- Dynamically switching search bar icons -->
+    <ImageView
+        android:id="@+id/clearSearchIcon"
+        style="@style/SearchIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/clear_search"
+        android:src="@drawable/clear_search"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/searchBar"
+        app:layout_constraintEnd_toEndOf="@id/searchBar"
+        app:layout_constraintTop_toTopOf="@id/searchBar" />
+
+    <ImageView
+        android:id="@+id/searchBarLoupeIcon"
+        style="@style/SearchBarIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/search_loupe"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/searchBar"
+        app:layout_constraintEnd_toEndOf="@id/searchBar"
+        app:layout_constraintTop_toTopOf="@id/searchBar" />
+
+    <!-- Progress bar for loading new vacancies list -->
+    <ProgressBar
+        android:id="@+id/progressBarLoadingFromSearch"
+        style="@style/LoadingProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchBarGuideline"
+        app:layout_constraintVertical_bias="0" />
+
+    <!-- Recycler -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vacancyRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingHorizontal="@dimen/dimens_16"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_40"
+        android:visibility="visible"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@id/progressBarLoadingNewPage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchBarGuideline"
+        app:layout_constraintVertical_bias="0"
+        app:layout_goneMarginBottom="0dp"
+        tools:listitem="@layout/item_vacancy" />
+
+    <!-- Progress bar for loading new page (under recycler, locked to bottom)-->
+    <ProgressBar
+        android:id="@+id/progressBarLoadingNewPage"
+        style="@style/LoadingProgressBarBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Results popup -->
+
+    <TextView
+        android:id="@+id/resultCountPopup"
+        style="@style/CountPopupTextViewRegular16NoPadding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_screen_no_results_popup"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchBarGuideline"
+        app:layout_constraintVertical_bias="0.0"
+        tools:targetApi="p" />
+
+    <!-- Default image -->
+    <ImageView
+        android:id="@+id/defaultIllustration"
+        style="@style/IllustrationIconDefault"
+        android:layout_width="@dimen/dp_328"
+        android:layout_height="@dimen/dp_224"
+        android:src="@drawable/il_1"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/searchBarGuideline"
+        tools:ignore="ContentDescription" />
+
+    <!-- No internet error -->
+    <ImageView
+        android:id="@+id/noInternetErrorIllustration"
+        style="@style/NoInternetIcon"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_224"
+        android:src="@drawable/il_2"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchBar" />
+
+    <TextView
+        android:id="@+id/noInternetErrorText"
+        style="@style/NoInternetTextViewMedium22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_internet_error"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/noInternetErrorIllustration"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!-- Failed to fetch list of vacancies error-->
+    <ImageView
+        android:id="@+id/failedToFetchListErrorIllustration"
+        style="@style/FetchListErrorIcon"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_224"
+        android:src="@drawable/il_5"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/resultCountPopup" />
+
+    <TextView
+        android:id="@+id/failedToFetchListErrorText"
+        style="@style/FetchListErrorTextViewMedium22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vacancies_list_server_error"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/failedToFetchListErrorIllustration"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!-- New page server error -->
+    <ImageView
+        android:id="@+id/serverErrorIllustration"
+        style="@style/FetchListErrorIcon"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_224"
+        android:src="@drawable/il_3"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/resultCountPopup" />
+
+    <TextView
+        android:id="@+id/serverErrorText"
+        style="@style/FetchListErrorTextViewMedium22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/server_error"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/serverErrorIllustration"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>

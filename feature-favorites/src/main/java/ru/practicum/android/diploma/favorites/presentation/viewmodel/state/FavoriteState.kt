@@ -6,6 +6,6 @@ internal sealed interface FavoriteState {
     data class Content(
         val favoriteVacancies: List<FavoriteVacancy>
     ) : FavoriteState
-    object Empty : FavoriteState
-    object Error : FavoriteState
+    data object Empty : FavoriteState
+    data object Error : FavoriteState
 }

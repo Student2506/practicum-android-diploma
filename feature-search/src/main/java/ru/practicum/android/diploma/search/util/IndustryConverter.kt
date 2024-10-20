@@ -18,7 +18,7 @@ internal class IndustryConverter {
         }
     }
 
-    fun map(industries: List<IndustryDto>): List<Industry> {
+    private fun map(industries: List<IndustryDto>): List<Industry> {
         return industries.map { map(it) }
     }
 }

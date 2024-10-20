@@ -1,8 +1,10 @@
 package ru.practicum.android.diploma.filter.filter.domain.model
 
+import ru.practicum.android.diploma.filter.industry.domain.model.IndustryModel
+
 data class FilterSettings(
     val placeSettings: PlaceSettings?,
-    val branchOfProfession: IndustrySetting?,
+    val branchOfProfession: IndustryModel?,
     val expectedSalary: String?,
     val doNotShowWithoutSalary: Boolean,
 ) {
@@ -10,7 +12,7 @@ data class FilterSettings(
         fun emptyFilterSettings(): FilterSettings {
             return FilterSettings(
                 placeSettings = PlaceSettings(null, null, null, null),
-                branchOfProfession = IndustrySetting(null, null),
+                branchOfProfession = IndustryModel(null, null),
                 expectedSalary = null,
                 doNotShowWithoutSalary = false
             )
@@ -23,7 +25,7 @@ fun FilterSettings.resetPlaceSettings(): FilterSettings {
 }
 
 fun FilterSettings.resetBranchOfProfession(): FilterSettings {
-    return this.copy(branchOfProfession = IndustrySetting(null, null))
+    return this.copy(branchOfProfession = IndustryModel(null, null))
 }
 
 fun FilterSettings.updateExpectedSalary(newSalary: String?): FilterSettings {

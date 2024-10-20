@@ -3,9 +3,14 @@
 
     <!-- Content descriptions -->
     <string name="back">Назад</string>
+    <string name="share">Поделиться</string>
+    <string name="add_to_favorites">Добавить в избранное</string>
     <string name="clear_search">Сбросить поисковой запрос</string>
     <string name="select_industry">Выбрать отрасль</string>
     <string name="select_location">Выбрать место работы</string>
+    <string name="clear_filter">Сбросить настройки фильтра</string>
+
+    <string name="placeholder_place">Место</string>
 
     <!-- BottomNavigation tabs -->
     <string name="search">Главная</string>
@@ -77,18 +82,32 @@
     <string name="favorites_company">Название компании</string>
     <string name="salary_size">Размер заработной платы</string>
 
+    <!-- Favorites screen system messages-->
+    <string name="message_empty">Empty</string>
+    <string name="message_no_add_favorite">No Add Favorite</string>
+    <string name="message_no_delete_favorite">No Delete Favorite</string>
+    <string name="message_error">Error</string>
+
+    <!-- Region screen -->
+    <string name="hint_input_region">Введите регион</string>
+
     <!-- Team screen -->
     <string name="team_screen_header">Команда</string>
     <string name="team_screen_text">Над приложением работали</string>
     <string name="team_screen_developer_list">Павел Захаров Team-lead\n\nЮлия Вакулина Android-разработчик\n\nМаксим Сагациян Android-разработчик\n\nМихаил Гришин Android-разработчик</string>
 
-    <!-- Network -->
+
     <!-- Errors -->
     <string name="check_network_connection">Check network connection</string>
     <string name="request_was_not_accepted">Request was not accepted %1$s</string>
     <string name="unexpected_error">Unexpected error %1$s</string>
     <string name="request_was_not_accepted_404">404</string>
+    <string name="there_is_no_such_region">Такого региона нет</string>
+    <string name="there_is_no_such_industry">Такой отрасли нет</string>
+    <string name="search_screen_toast_no_internet">Проверьте подключение к интернету</string>
+    <string name="search_screen_toast_error">Произошла ошибка</string>
 
+    <!-- Salary -->
     <string name="salary_from">от %s %s</string>
     <string name="salary_to">до %s %s</string>
     <string name="salary_from_to">от %s до %s %s</string>
@@ -106,21 +125,23 @@
     <string name="currency_kgs">сом</string>
     <string name="currency_amd">֏</string>
 
-    <string name="message_empty">Empty</string>
-    <string name="message_no_add_favorite">No Add Favorite</string>
-    <string name="message_no_delete_favorite">No Delete Favorite</string>
-    <string name="message_error">Error</string>
 
     <string name="share_link">https://hh.ru/vacancy/</string>
 
     <!-- Strings for display -->
-    <string name="search_screen_toast_no_internet">Проверьте подключение к интернету</string>
-    <string name="search_screen_toast_error">Произошла ошибка</string>
+
     <plurals name="vacancies_found">
         <item quantity="one">Найдена %1$d вакансия</item>
         <item quantity="few">Найдено %1$d вакансии</item>
         <item quantity="many">Найдено %1$d вакансий</item>
         <item quantity="other">Найдено %1$d вакансий</item>
+    </plurals>
+
+    <plurals name="age_range">
+        <item quantity="one">От %d года до %d года</item>
+        <item quantity="few">От %d года до %d лет</item>
+        <item quantity="many">От %d лет до %d лет</item>
+        <item quantity="other">От %d лет до %d лет</item>
     </plurals>
 
     <string name="filter_place_form">%s, %s</string>

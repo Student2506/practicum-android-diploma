@@ -1,13 +1,13 @@
 package ru.practicum.android.diploma.search.presentation
 
 internal sealed class SearchScreenState {
-    object IDLE : SearchScreenState()
+    data object IDLE : SearchScreenState()
 
-    object VACANCY_LIST_LOADED : SearchScreenState()
+    data object VACANCY_LIST_LOADED : SearchScreenState()
 
-    object LOADING_NEW_LIST : SearchScreenState()
+    data object LOADING_NEW_LIST : SearchScreenState()
 
-    object LOADING_NEW_PAGE : SearchScreenState()
+    data object LOADING_NEW_PAGE : SearchScreenState()
 
     sealed class Error : SearchScreenState() {
         object SERVER_ERROR : Error()

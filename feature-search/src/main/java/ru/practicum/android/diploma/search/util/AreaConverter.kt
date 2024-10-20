@@ -14,9 +14,11 @@ internal class AreaConverter {
     }))
 
     fun map(areas: List<AreaInVacancyDto>): List<AreaInVacancy> = areas.map { map(it) }
-    fun mapAreaReference(areas: List<AreaInReferenceDto>): List<AreaInReference> = areas.map { map(it) }
-    fun map(area: AreaInVacancyDto): AreaInVacancy = with(area) { AreaInVacancy(id = id, name = name, url = url) }
-    fun map(areaInReferernceDto: AreaInReferenceDto): AreaInReference =
+    private fun mapAreaReference(areas: List<AreaInReferenceDto>): List<AreaInReference> = areas.map { map(it) }
+    private fun map(
+        area: AreaInVacancyDto
+    ): AreaInVacancy = with(area) { AreaInVacancy(id = id, name = name, url = url) }
+    private fun map(areaInReferernceDto: AreaInReferenceDto): AreaInReference =
         with(areaInReferernceDto) {
             AreaInReference(
                 areas = mapAreaReference(areaInReferernceDto.areas),

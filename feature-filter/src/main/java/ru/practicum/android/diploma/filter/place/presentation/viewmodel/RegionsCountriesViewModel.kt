@@ -19,7 +19,7 @@ import ru.practicum.android.diploma.filter.place.presentation.viewmodel.state.Re
 
 private const val SEARCH_DEBOUNCE_DELAY = 1000L
 
-class RegionsCountriesViewModel(
+internal class RegionsCountriesViewModel(
     private val regionInteractor: RegionInteractor,
 ) : ViewModel() {
 
@@ -175,7 +175,7 @@ class RegionsCountriesViewModel(
         places.filter(filter).map { country ->
             val nameCountry = country.name
             country.areas.map { region ->
-                region.parentId?.let {
+                region.parentId.let {
                     regions.add(
                         Region(
                             id = region.id,

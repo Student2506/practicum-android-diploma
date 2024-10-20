@@ -7,11 +7,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.filter.domain.model.FilterSettings
-import ru.practicum.android.diploma.filter.filter.domain.model.IndustrySetting
 import ru.practicum.android.diploma.filter.filter.domain.model.PlaceSettings
 import ru.practicum.android.diploma.filter.filter.domain.usecase.FilterSPInteractor
+import ru.practicum.android.diploma.filter.industry.domain.model.IndustryModel
 
-class FilterViewModel(
+internal class FilterViewModel(
     private val filterSPInteractor: FilterSPInteractor
 ) : ViewModel() {
 
@@ -80,7 +80,7 @@ class FilterViewModel(
                 null,
                 null
             ),
-            IndustrySetting(
+            IndustryModel(
                 null,
                 null
             ), null, false)

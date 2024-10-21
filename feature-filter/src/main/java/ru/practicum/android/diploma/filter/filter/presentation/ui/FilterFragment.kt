@@ -41,22 +41,21 @@ internal class FilterFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFilterBinding.inflate(inflater, container, false)
-        viewModel.getBufferDataFromSpAndCompareFilterSettings()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.filterOptionsBufferLiveData.observe(viewLifecycleOwner) { filter ->
+        viewModel.filterOptionsLiveData.observe(viewLifecycleOwner) { filter ->
             render(filter)
         }
 
-        viewModel.newSettingsFilterLiveData.observe(viewLifecycleOwner) { newSettingsFilter ->
-            binding.buttonApply.visibility = if (newSettingsFilter) {
-                View.GONE
+        viewModel.pendingChangesLiveData.observe(viewLifecycleOwner) { changes ->
+            binding.buttonApply.isVisible = if (changes) {
+                true
             } else {
-                View.VISIBLE
+                false
             }
         }
 
@@ -66,7 +65,7 @@ internal class FilterFragment : Fragment() {
         binding.editTextFilter.addTextChangedListener(inputSearchWatcher)
 
         binding.checkBox.setOnCheckedChangeListener { compoundButton, isChecked ->
-            viewModel.setDoNotShowWithoutSalaryInDataFilterBuffer(isChecked)
+            viewModel.toggleDoNotShowWithoutSalary(isChecked)
         }
     }
 
@@ -76,28 +75,34 @@ internal class FilterFragment : Fragment() {
                 R.id.workPlace, R.id.inputWorkPlaceLayout, R.id.inputWorkPlace, R.id.clickWorkPlace -> {
                     findNavController().navigate(R.id.action_filterFragment_to_placeFragment)
                 }
+
                 R.id.workIndustry, R.id.inputWorkIndustryLayout, R.id.inputWorkIndustry, R.id.clickWorkIndustry -> {
                     findNavController().navigate(R.id.action_filterFragment_to_industryFragment)
                 }
+
                 R.id.clickWorkPlaceClear -> {
-                    viewModel.clearPlaceInDataFilterBuffer()
+                    viewModel.clearPlaceData()
                     renderPlaceFilterClear()
                 }
+
                 R.id.clickWorkIndustryClear -> {
-                    viewModel.clearProfessionInDataFilterBuffer()
+                    viewModel.clearIndustryData()
                     renderProfessionFilterClear()
                 }
+
                 R.id.buttonApply -> {
-                    viewModel.copyDataFilterBufferInDataFilter()
-                    findNavController().navigateUp()
+                    viewModel.applyChanges()
+                    findNavController().navigateUp() //todo delete?
                 }
+
                 R.id.buttonBack -> {
-                    viewModel.copyDataFilterInDataFilterBuffer()
+                    viewModel.discardChanges()
                     findNavController().navigateUp()
                 }
+
                 R.id.buttonCancel -> {
-                    viewModel.clearDataFilterAll()
-                    findNavController().navigateUp()
+                    viewModel.clearFilters()
+                    findNavController().navigateUp() //todo delete?
                 }
             }
         }
@@ -120,10 +125,10 @@ internal class FilterFragment : Fragment() {
     }
 
     private fun visibleClearFilter(filter: FilterSettings?) {
-        binding.buttonCancel.visibility = if (filter != null && !filter.equals(emptyFilterSetting())) {
-            View.VISIBLE
+        binding.buttonCancel.isVisible = if (filter != null && !filter.equals(emptyFilterSetting())) {
+            true
         } else {
-            View.GONE
+            false
         }
     }
 
@@ -153,7 +158,7 @@ internal class FilterFragment : Fragment() {
             requireContext().closeKeyBoard(v)
             val inputSalary = binding.editTextFilter.text
             val textSalary = if (inputSalary.isNullOrEmpty()) "" else inputSalary.toString()
-            viewModel.setSalaryInDataFilterBuffer(textSalary)
+            viewModel.setSalaryExpectations(textSalary)
             true
         } else {
             false
@@ -237,6 +242,11 @@ internal class FilterFragment : Fragment() {
 
     private fun emptyFilterSetting(): FilterSettings {
         return FilterSettings.emptyFilterSettings()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadChangesForOtherScreens()
     }
 
     override fun onDestroy() {

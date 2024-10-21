@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.filter.filter.domain.model.FilterSettings
 import ru.practicum.android.diploma.filter.filter.domain.usecase.FilterSPInteractor
 
@@ -12,82 +14,82 @@ class FilterViewModel(
     private val filterSPInteractor: FilterSPInteractor
 ) : ViewModel() {
 
-    private var _filterOptionsBufferLiveData: MutableLiveData<FilterSettings> = MutableLiveData<FilterSettings>()
-    val filterOptionsBufferLiveData: LiveData<FilterSettings> = _filterOptionsBufferLiveData
+    private var _filterOptionsLiveData: MutableLiveData<FilterSettings> = MutableLiveData<FilterSettings>()
+    val filterOptionsLiveData: LiveData<FilterSettings> = _filterOptionsLiveData
 
-    private var _newSettingsFilterLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-    val newSettingsFilterLiveData: LiveData<Boolean> = _newSettingsFilterLiveData
+    private var _pendingChangesLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    val pendingChangesLiveData: LiveData<Boolean> = _pendingChangesLiveData
+
+    private var oldFilterSettings: FilterSettings = FilterSettings.emptyFilterSettings()
 
     init {
-        copyDataFilterInDataFilterBuffer()
-    }
-
-    fun copyDataFilterInDataFilterBuffer() {
-        viewModelScope.launch {
-            filterSPInteractor.copyDataFilterInDataFilterBuffer()
+        _pendingChangesLiveData.value = false
+        viewModelScope.launch(Dispatchers.IO) {
+            oldFilterSettings = filterSPInteractor.getDataFilter()
+            _filterOptionsLiveData.postValue(oldFilterSettings)
+            filterSPInteractor.updateDataFilterBuffer(oldFilterSettings)
+            withContext(Dispatchers.Main) {
+                pendingChangesCheck()
+            }
         }
     }
 
-    fun copyDataFilterBufferInDataFilter() {
-        viewModelScope.launch {
-            filterSPInteractor.copyDataFilterBufferInDataFilter()
+    fun clearPlaceData() {
+        _filterOptionsLiveData.value = _filterOptionsLiveData.value?.copy(placeSettings = null)
+        pendingChangesCheck()
+
+    }
+
+    fun clearIndustryData() {
+        _filterOptionsLiveData.value = _filterOptionsLiveData.value?.copy(branchOfProfession = null)
+        pendingChangesCheck()
+    }
+
+    fun setSalaryExpectations(textSalary: String) {
+        _filterOptionsLiveData.value = _filterOptionsLiveData.value?.copy(expectedSalary = textSalary)
+        pendingChangesCheck()
+    }
+
+    fun toggleDoNotShowWithoutSalary(state: Boolean) {
+        _filterOptionsLiveData.value = _filterOptionsLiveData.value?.copy(doNotShowWithoutSalary = state)
+        pendingChangesCheck()
+    }
+
+    fun applyChanges() {
+        viewModelScope.launch(Dispatchers.IO) {
+            oldFilterSettings = filterOptionsLiveData.value ?: FilterSettings.emptyFilterSettings()
+            filterSPInteractor.updateDataFilter(oldFilterSettings)
+            withContext(Dispatchers.Main) {
+                pendingChangesCheck()
+            }
         }
     }
 
-    fun getBufferDataFromSpAndCompareFilterSettings() {
-        viewModelScope.launch {
-            getBufferDataFromSpAndCompareFilterSettingsSuspend()
+    fun discardChanges() {
+        _filterOptionsLiveData.value = FilterSettings.emptyFilterSettings()
+        pendingChangesCheck()
+    }
+
+    fun clearFilters(){
+        oldFilterSettings= FilterSettings.emptyFilterSettings()
+        _filterOptionsLiveData.value = FilterSettings.emptyFilterSettings()
+        pendingChangesCheck()
+        viewModelScope.launch(Dispatchers.IO) {
+            filterSPInteractor.updateDataFilter(FilterSettings.emptyFilterSettings())
         }
     }
 
-    private suspend fun getBufferDataFromSpAndCompareFilterSettingsSuspend() {
-        val filterSettings = filterSPInteractor.getDataFilter()
-        val filterSettingsBuffer = filterSPInteractor.getDataFilterBuffer()
-        _filterOptionsBufferLiveData.postValue(filterSettingsBuffer)
-
-        val compareFilterSettings = filterSettings == filterSettingsBuffer
-        _newSettingsFilterLiveData.postValue(compareFilterSettings)
-    }
-
-    fun setSalaryInDataFilterBuffer(salaryInDataFilter: String) {
-        viewModelScope.launch {
-            filterSPInteractor.updateSalaryInDataFilterBuffer(salaryInDataFilter)
-            getBufferDataFromSpAndCompareFilterSettingsSuspend()
+    fun loadChangesForOtherScreens() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _filterOptionsLiveData.postValue(filterSPInteractor.getDataFilterBuffer())
+            withContext(Dispatchers.Main) {
+                pendingChangesCheck()
+            }
         }
     }
 
-    fun setDoNotShowWithoutSalaryInDataFilterBuffer(doNotShowWithoutSalary: Boolean) {
-        viewModelScope.launch {
-            filterSPInteractor.updateDoNotShowWithoutSalaryInDataFilterBuffer(doNotShowWithoutSalary)
-            getBufferDataFromSpAndCompareFilterSettingsSuspend()
-        }
+    private fun pendingChangesCheck() {
+        _pendingChangesLiveData.value = _filterOptionsLiveData.value != oldFilterSettings
     }
 
-    fun clearPlaceInDataFilterBuffer() {
-        viewModelScope.launch {
-            filterSPInteractor.clearPlaceInDataFilterBuffer()
-            getBufferDataFromSpAndCompareFilterSettingsSuspend()
-        }
-    }
-
-    fun clearProfessionInDataFilterBuffer() {
-        viewModelScope.launch {
-            filterSPInteractor.clearProfessionInDataFilterBuffer()
-            getBufferDataFromSpAndCompareFilterSettingsSuspend()
-        }
-    }
-
-    fun clearDataFilterAll() {
-        viewModelScope.launch {
-            filterSPInteractor.clearDataFilterAll()
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelScope.launch {
-            val filterSettingsBuffer = FilterSettings.emptyFilterSettings()
-            filterSPInteractor.updateDataFilterBuffer(filterSettingsBuffer)
-        }
-    }
 }

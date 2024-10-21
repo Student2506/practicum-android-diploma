@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.data.sp.api.impl
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.gson.Gson
 import ru.practicum.android.diploma.data.sp.api.FilterSp
 import ru.practicum.android.diploma.data.sp.dto.FilterDto
@@ -20,9 +21,11 @@ class FilterSpImpl(
 ) : FilterSp {
 
     override fun clearDataFilterAll() {
+        Log.d("Loggg","Place in SP before full clear: ${filterSp.getString(PLACE_KEY_SP_BUFFER, "doesn't exist")}")//todo delete
         filterSp.edit()
             .clear()
             .apply()
+        Log.d("Loggg","Place in SP after full clear: ${filterSp.getString(PLACE_KEY_SP_BUFFER, "deleted")}")//todo delete
     }
 
     override fun clearIndustryFilterBuffer() {
@@ -72,6 +75,7 @@ class FilterSpImpl(
     }
 
     override fun getDataFilter(): FilterDto {
+        Log.d("Loggg","Filter get in SP")//todo delete
         val json = filterSp.getString(FILTER_KEY_SP, null)
         return if (json != null) {
             gson.fromJson(json, FilterDto::class.java)
@@ -91,6 +95,7 @@ class FilterSpImpl(
             filterSp.edit()
                 .putString(FILTER_KEY_SP, json)
                 .apply()
+            Log.d("Loggg","updateDataFilter in SP, ${filterSp.getString(FILTER_KEY_SP,"")}")//todo delete
         }.fold(
             onSuccess = { 1 },
             onFailure = { -1 }

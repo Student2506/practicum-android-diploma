@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.search.presentation.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -154,6 +155,8 @@ internal class VacancyListViewModel(
 
     fun checkFilterState(): Boolean {
         initQueryFilter(vacanciesInteractor.getDataFilter())
+        Log.d("Loggg","Area in Search: ${queryFilter[AREA_ID]}")//todo delete
+        Log.d("Loggg","Industry in Search: ${queryFilter[INDUSTRY_ID]}")//todo delete
         return (queryFilter[INDUSTRY_ID] != null || queryFilter[AREA_ID] != null
             || !queryFilter[SALARY].isNullOrBlank() || queryFilter[ONLY_WITH_SALARY].toBoolean())
     }

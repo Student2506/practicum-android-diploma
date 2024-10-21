@@ -92,7 +92,6 @@ internal class FilterFragment : Fragment() {
 
                 R.id.buttonApply -> {
                     viewModel.applyChanges()
-                    findNavController().navigateUp() //todo delete?
                 }
 
                 R.id.buttonBack -> {
@@ -102,7 +101,6 @@ internal class FilterFragment : Fragment() {
 
                 R.id.buttonCancel -> {
                     viewModel.clearFilters()
-                    findNavController().navigateUp() //todo delete?
                 }
             }
         }

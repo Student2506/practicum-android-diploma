@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.search.domain.models.sp
 
-data class PlaceSearch(
+data class PlaceSearchModel(
     val idCountry: String?,
     val nameCountry: String?,
     val idRegion: String?,

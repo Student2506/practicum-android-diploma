@@ -1,23 +1,23 @@
 package ru.practicum.android.diploma.search.data.repositoryimpl.mappers
 
 import ru.practicum.android.diploma.data.sp.dto.FilterDto
-import ru.practicum.android.diploma.search.domain.models.sp.FilterSearch
-import ru.practicum.android.diploma.search.domain.models.sp.IndustrySearch
-import ru.practicum.android.diploma.search.domain.models.sp.PlaceSearch
+import ru.practicum.android.diploma.search.domain.models.Industry
+import ru.practicum.android.diploma.search.domain.models.sp.FilterSearchModel
+import ru.practicum.android.diploma.search.domain.models.sp.PlaceSearchModel
 
 object SearchMappers {
-    fun map(filterDto: FilterDto): FilterSearch {
+    fun map(filterDto: FilterDto): FilterSearchModel {
         return with(filterDto) {
-            FilterSearch(
-                placeSearch = PlaceSearch(
-                    idCountry = placeDto?.idCountry,
-                    nameCountry = placeDto?.nameCountry,
-                    idRegion = placeDto?.idRegion,
-                    nameRegion = placeDto?.nameRegion
+            FilterSearchModel(
+                placeSearchModel = PlaceSearchModel(
+                    idCountry = filterDto.placeDto?.idCountry,
+                    nameCountry = filterDto.placeDto?.nameCountry,
+                    idRegion = filterDto.placeDto?.idRegion,
+                    nameRegion = filterDto.placeDto?.nameRegion
                 ),
-                branchOfProfession = IndustrySearch(
-                    id = branchOfProfession?.id,
-                    name = branchOfProfession?.name
+                industry = Industry(
+                    id = filterDto.branchOfProfession?.id ?: "",
+                    name = filterDto.branchOfProfession?.name ?: ""
                 ),
                 expectedSalary = expectedSalary,
                 doNotShowWithoutSalary = doNotShowWithoutSalary

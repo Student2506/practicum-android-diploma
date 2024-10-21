@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.search.domain.models.IndustryList
 import ru.practicum.android.diploma.search.domain.models.PaginationInfo
 import ru.practicum.android.diploma.search.domain.models.RegionList
 import ru.practicum.android.diploma.search.domain.models.VacancyDetail
-import ru.practicum.android.diploma.search.domain.models.sp.FilterSearch
+import ru.practicum.android.diploma.search.domain.models.sp.FilterSearchModel
 import ru.practicum.android.diploma.search.domain.repository.SearchRepositorySp
 import ru.practicum.android.diploma.search.domain.repository.VacanciesRepository
 import ru.practicum.android.diploma.search.domain.usecase.VacanciesInteractor
@@ -81,7 +81,7 @@ internal class VacanciesInteractorImpl(
         }
     }
 
-    override fun getDataFilter(): FilterSearch {
+    override fun getDataFilter(): FilterSearchModel {
         return searchRepositorySp.getDataFilter()
     }
 }

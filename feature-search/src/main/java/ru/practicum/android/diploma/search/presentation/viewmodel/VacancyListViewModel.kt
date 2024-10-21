@@ -8,9 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.search.domain.models.Industry
 import ru.practicum.android.diploma.search.domain.models.PaginationInfo
 import ru.practicum.android.diploma.search.domain.models.Vacancy
-import ru.practicum.android.diploma.search.domain.models.sp.FilterSearch
+import ru.practicum.android.diploma.search.domain.models.sp.FilterSearchModel
 import ru.practicum.android.diploma.search.domain.usecase.VacanciesInteractor
 import ru.practicum.android.diploma.search.presentation.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.viewmodel.state.VacancyListState
@@ -49,16 +50,23 @@ internal class VacancyListViewModel(
         initQueryFilter(vacanciesInteractor.getDataFilter())
     }
 
-    private fun initQueryFilter(filterSearch: FilterSearch) {
-        filterSearch.branchOfProfession?.id?.let { queryFilter.put(INDUSTRY_ID, it) }
-        filterSearch.expectedSalary?.let { queryFilter.put(SALARY, it) }
-        filterSearch.doNotShowWithoutSalary.let { queryFilter.put(ONLY_WITH_SALARY, it.toString()) }
-        filterSearch.placeSearch?.let { place ->
-            place.idCountry?.let { queryFilter.put(AREA_ID, it) }
+    private fun initQueryFilter(filterSearchModel: FilterSearchModel) {
+        Log.d("Loggg","initQueryFilter: ${filterSearchModel}")//todo delete
+        queryFilter.put(AREA_ID, "") // must be nulled first
+        queryFilter.put(INDUSTRY_ID, "") // must be nulled first
+        filterSearchModel.placeSearchModel?.let {
+            queryFilter.put(AREA_ID, it.idCountry ?: "")
+            Log.d("Loggg","countryID being set in query: ${it.idCountry}")//todo delete
+            queryFilter.put(AREA_ID, it.idRegion ?: "")
+            Log.d("Loggg","idRegion being set in query: ${it.idRegion}")//todo delete
         }
-        filterSearch.placeSearch?.let { place ->
-            place.idRegion?.let { queryFilter.put(AREA_ID, it) }
+        filterSearchModel.industry?.let {
+            queryFilter.put(INDUSTRY_ID, it.id)
         }
+        filterSearchModel.expectedSalary?.let {
+            queryFilter.put(SALARY, it) }
+        filterSearchModel.doNotShowWithoutSalary.let {
+            queryFilter.put(ONLY_WITH_SALARY, it.toString()) }
     }
 
     fun initialSearch(query: String) {
@@ -156,7 +164,9 @@ internal class VacancyListViewModel(
         initQueryFilter(vacanciesInteractor.getDataFilter())
         Log.d("Loggg","Area in Search: ${queryFilter[AREA_ID]}")//todo delete
         Log.d("Loggg","Industry in Search: ${queryFilter[INDUSTRY_ID]}")//todo delete
-        return (queryFilter[INDUSTRY_ID] != null || queryFilter[AREA_ID] != null
+        Log.d("Loggg","Search filter state: ${(queryFilter[INDUSTRY_ID] != "")} ${(queryFilter[AREA_ID] != "")} ${!queryFilter[SALARY].isNullOrBlank()} ${queryFilter[ONLY_WITH_SALARY].toBoolean()}")//todo delete
+
+        return (queryFilter[INDUSTRY_ID] != "" || queryFilter[AREA_ID] != ""
             || !queryFilter[SALARY].isNullOrBlank() || queryFilter[ONLY_WITH_SALARY].toBoolean())
     }
 }

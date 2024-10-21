@@ -77,7 +77,7 @@ class FilterSpImpl(
     override fun getDataFilter(): FilterDto {
         Log.d("Loggg","Filter get in SP")//todo delete
         val json = filterSp.getString(FILTER_KEY_SP, null)
-        return if (json != null) {
+        val ret = if (json != null) { //todo revert to return if (json != null)
             gson.fromJson(json, FilterDto::class.java)
         } else {
             FilterDto(
@@ -87,6 +87,8 @@ class FilterSpImpl(
                 doNotShowWithoutSalary = false
             )
         }
+        Log.d("Loggg","country from SP ${ret.placeDto?.nameCountry}")//todo delet
+        return ret // todo delete
     }
 
     override fun updateDataFilter(filterDto: FilterDto): Int {
@@ -103,6 +105,7 @@ class FilterSpImpl(
     }
 
     override fun getDataFilterBuffer(): FilterDto {
+        Log.d("Loggg","SP buffer get")//todo delete
         return FilterDto(
             placeDto = getPlaceDataFilterBuffer(),
             branchOfProfession = getBranchOfProfessionDataFilterBuffer(),
@@ -120,6 +123,7 @@ class FilterSpImpl(
     }
 
     override fun updateDataFilterBuffer(filterDto: FilterDto): Int {
+        Log.d("Loggg","SP buffer set")//todo delete
         val list = listOf(
             filterDto.placeDto?.let {
                 updatePlaceInDataFilterBuffer(it)

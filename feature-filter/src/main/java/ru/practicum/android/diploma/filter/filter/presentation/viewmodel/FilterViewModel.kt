@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filter.filter.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,6 +27,7 @@ class FilterViewModel(
         _pendingChangesLiveData.value = false
         viewModelScope.launch(Dispatchers.IO) {
             oldFilterSettings = filterSPInteractor.getDataFilter()
+            Log.d("Loggg","filter vm init, country :${oldFilterSettings.placeSettings?.nameCountry}") //todo del
             _filterOptionsLiveData.postValue(oldFilterSettings)
             filterSPInteractor.updateDataFilterBuffer(oldFilterSettings)
             withContext(Dispatchers.Main) {

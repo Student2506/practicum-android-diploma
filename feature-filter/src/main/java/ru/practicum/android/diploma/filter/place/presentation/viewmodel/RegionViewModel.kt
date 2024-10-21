@@ -79,7 +79,7 @@ class RegionViewModel(
         places.filter(filter).map { country ->
             val nameCountry = country.name
             country.areas.map { region ->
-                region.parentId?.let {
+                region.parentId.let {
                     regions.add(
                         Region(
                             id = region.id,
@@ -128,7 +128,7 @@ class RegionViewModel(
         }
     }
 
-    private val searchRegionsDebounce = debounce<String>(
+    private val trackSearchDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY,
         viewModelScope,
         true,
@@ -139,6 +139,6 @@ class RegionViewModel(
 
     fun searchDebounce(changedText: String) {
         latestSearchText = changedText
-        searchRegionsDebounce(changedText)
+        trackSearchDebounce(changedText)
     }
 }

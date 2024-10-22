@@ -37,7 +37,6 @@ internal class VacancyListViewModel(
 
     private var paginationInfo = PaginationInfo(emptyList<Vacancy>(), 0, 0, 0)
     private var currentQuery: String = ""
-    private var currentPage: Int = 0
 
     private val queryFilter: MutableMap<String, String> = mutableMapOf()
 
@@ -95,7 +94,7 @@ internal class VacancyListViewModel(
     }
 
     fun loadNextPageRequest() {
-        if (paginationInfo.page == paginationInfo.pages) {
+        if (paginationInfo.page >= paginationInfo.pages) {
             return
         }
 
@@ -103,7 +102,7 @@ internal class VacancyListViewModel(
         val currentList = (vacancyListStateLiveData.value as VacancyListState.Content).vacancies
         viewModelScope.launch(Dispatchers.IO) {
             vacanciesInteractor.searchVacancies(
-                page = (currentPage + 1).toString(),
+                page = (paginationInfo.page + 1).toString(),
                 perPage = "${PAGE_SIZE}",
                 queryText = currentQuery,
                 industry = queryFilter.get(INDUSTRY_ID),

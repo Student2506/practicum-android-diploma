@@ -5,39 +5,57 @@ import ru.practicum.android.diploma.filter.filter.data.mappers.FilterMapper
 import ru.practicum.android.diploma.filter.filter.domain.model.FilterSettings
 import ru.practicum.android.diploma.filter.filter.domain.repository.FilterSPRepository
 
-class FilterSPRepositoryImpl(
-    val filterSp: FilterSp
-) : FilterSPRepository {
+internal class FilterSPRepositoryImpl(private val filterSp: FilterSp) : FilterSPRepository {
 
-    override suspend fun clearDataFilter() {
-        filterSp.clearDataFilter()
+    override suspend fun clearDataFilterAll() {
+        filterSp.clearDataFilterAll()
     }
 
-    override suspend fun getExpectedSalaryDataFilter(): String? {
-        return filterSp.getExpectedSalaryDataFilter()
+    override suspend fun getExpectedSalaryDataFilterBuffer(): String? {
+        return filterSp.getExpectedSalaryDataFilterBuffer()
     }
 
-    override suspend fun isDoNotShowWithoutSalaryDataFilter(): Boolean {
-        return filterSp.isDoNotShowWithoutSalaryDataFilter()
+    override suspend fun isDoNotShowWithoutSalaryDataFilterBuffer(): Boolean {
+        return filterSp.isDoNotShowWithoutSalaryDataFilterBuffer()
     }
 
     override suspend fun getDataFilter(): FilterSettings {
         return FilterMapper.map(filterSp.getDataFilter())
     }
 
-    override suspend fun clearPlaceInDataFilter(): Int {
-        return filterSp.updatePlaceInDataFilter(FilterMapper.mapClearPlace())
+    override suspend fun getDataFilterBuffer(): FilterSettings {
+        return FilterMapper.map(filterSp.getDataFilterBuffer())
     }
 
-    override suspend fun clearProfessionInDataFilter(): Int {
-        return filterSp.updateProfessionInDataFilter(FilterMapper.mapClearIndustry())
+    override suspend fun copyDataFilterInDataFilterBuffer() {
+        filterSp.copyDataFilterInDataFilterBuffer()
     }
 
-    override suspend fun updateSalaryInDataFilter(expectedSalary: String): Int {
-        return filterSp.updateSalaryInDataFilter(expectedSalary)
+    override suspend fun copyDataFilterBufferInDataFilter() {
+        filterSp.copyDataFilterBufferInDataFilter()
     }
 
-    override suspend fun updateDoNotShowWithoutSalaryInDataFilter(doNotShowWithoutSalary: Boolean): Int {
-        return filterSp.updateDoNotShowWithoutSalaryInDataFilter(doNotShowWithoutSalary)
+    override suspend fun updateDataFilterBuffer(filter: FilterSettings): Int {
+        return filterSp.updateDataFilterBuffer(FilterMapper.map(filter))
+    }
+
+    override suspend fun updateDataFilter(filter: FilterSettings): Int {
+        return filterSp.updateDataFilter(FilterMapper.map(filter))
+    }
+
+    override suspend fun clearPlaceInDataFilterBuffer(): Int {
+        return filterSp.updatePlaceInDataFilterBuffer(FilterMapper.mapClearPlace())
+    }
+
+    override suspend fun clearProfessionInDataFilterBuffer(): Int {
+        return filterSp.updateProfessionInDataFilterBuffer(FilterMapper.mapClearIndustry())
+    }
+
+    override suspend fun updateSalaryInDataFilterBuffer(expectedSalary: String): Int {
+        return filterSp.updateSalaryInDataFilterBuffer(expectedSalary)
+    }
+
+    override suspend fun updateDoNotShowWithoutSalaryInDataFilterBuffer(doNotShowWithoutSalary: Boolean): Int {
+        return filterSp.updateDoNotShowWithoutSalaryInDataFilterBuffer(doNotShowWithoutSalary)
     }
 }

@@ -5,10 +5,10 @@ import ru.practicum.android.diploma.search.data.repositoryimpl.mappers.SearchMap
 import ru.practicum.android.diploma.search.domain.models.sp.FilterSearch
 import ru.practicum.android.diploma.search.domain.repository.SearchRepositorySp
 
-class SearchRepositorySpImpl(
-    val filterSp: FilterSp
+internal class SearchRepositorySpImpl(
+    private val filterSp: FilterSp
 ) : SearchRepositorySp {
-    override suspend fun getDataFilter(): FilterSearch {
+    override fun getDataFilter(): FilterSearch {
         return SearchMappers.map(filterSp.getDataFilter())
     }
 }

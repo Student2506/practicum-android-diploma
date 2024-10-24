@@ -5,17 +5,17 @@ import ru.practicum.android.diploma.filter.industry.data.mappers.IndustryMapper
 import ru.practicum.android.diploma.filter.industry.domain.model.IndustryModel
 import ru.practicum.android.diploma.filter.industry.domain.repository.IndustryRepositorySp
 
-class IndustryRepositorySpImpl(
+internal class IndustryRepositorySpImpl(
     private val filterSp: FilterSp
 ) : IndustryRepositorySp {
 
-    override suspend fun updateProfessionInDataFilter(branchOfProfession: IndustryModel): Int {
-        return filterSp.updateProfessionInDataFilter(
+    override suspend fun updateProfessionInDataFilterBuffer(branchOfProfession: IndustryModel): Int {
+        return filterSp.updateProfessionInDataFilterBuffer(
             IndustryMapper.map(branchOfProfession)
         )
     }
 
-    override suspend fun getBranchOfProfessionDataFilter(): IndustryModel? {
-        return filterSp.getBranchOfProfessionDataFilter()?.let { IndustryMapper.map(it) }
+    override suspend fun getBranchOfProfessionDataFilterBuffer(): IndustryModel? {
+        return filterSp.getBranchOfProfessionDataFilterBuffer()?.let { IndustryMapper.map(it) }
     }
 }

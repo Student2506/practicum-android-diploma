@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.search.domain.models
 
-data class VacancyDetail(
+internal data class VacancyDetail(
     val alternateUrl: String?,
     val applyAlternateUrl: String?,
     val area: AreaInVacancy,
@@ -14,7 +14,7 @@ data class VacancyDetail(
     val languages: List<Language>,
     val name: String,
     val professionalRoles: List<ProfessionalRole>,
-    val salary: Salary,
+    val salary: Salary?,
     val schedule: Schedule,
     val workingDays: List<WorkingDay>,
     val workingTimeIntervals: List<WorkingTimeInterval>,

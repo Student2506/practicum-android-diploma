@@ -23,7 +23,7 @@ private const val ONLY_WITH_SALARY = "only_with_salary"
 
 internal class VacancyListViewModel(
     private val vacanciesInteractor: VacanciesInteractor,
-    private val application: Application,
+    application: Application,
 ) : AndroidViewModel(application) {
 
     private var _screenStateLiveData = MutableLiveData<SearchScreenState>()
@@ -37,36 +37,34 @@ internal class VacancyListViewModel(
 
     private var paginationInfo = PaginationInfo(emptyList<Vacancy>(), 0, 0, 0)
     private var currentQuery: String = ""
-    private var currentPage: Int = 0
 
     private val queryFilter: MutableMap<String, String> = mutableMapOf()
 
     init {
-        _screenStateLiveData.value = SearchScreenState.IDLE
+        _screenStateLiveData.value = SearchScreenState.Idle
         _vacancyListStateLiveData.value = VacancyListState.Empty
         _currentResultsCountLiveData.value = 0
-        viewModelScope.launch(Dispatchers.IO) {
-            initQueryFilter(vacanciesInteractor.getDataFilter())
-        }
+        initQueryFilter(vacanciesInteractor.getDataFilter())
     }
 
     private fun initQueryFilter(filterSearch: FilterSearch) {
+        queryFilter.remove(INDUSTRY_ID)
+        queryFilter.remove(AREA_ID)
         filterSearch.branchOfProfession?.id?.let { queryFilter.put(INDUSTRY_ID, it) }
         filterSearch.expectedSalary?.let { queryFilter.put(SALARY, it) }
         filterSearch.doNotShowWithoutSalary.let { queryFilter.put(ONLY_WITH_SALARY, it.toString()) }
-        // !!!
-        filterSearch.placeSearch?.let { place ->
-            place.idRegion?.let { queryFilter.put(AREA_ID, it) }
-        }
         filterSearch.placeSearch?.let { place ->
             place.idCountry?.let { queryFilter.put(AREA_ID, it) }
+        }
+        filterSearch.placeSearch?.let { place ->
+            place.idRegion?.let { queryFilter.put(AREA_ID, it) }
         }
     }
 
     fun initialSearch(query: String) {
-        _screenStateLiveData.postValue(SearchScreenState.LOADING_NEW_LIST)
+        _screenStateLiveData.postValue(SearchScreenState.LoadingNewList)
         currentQuery = query
-
+        initQueryFilter(vacanciesInteractor.getDataFilter())
         viewModelScope.launch(Dispatchers.IO) {
             vacanciesInteractor.searchVacancies(
                 page = "0",
@@ -82,9 +80,9 @@ internal class VacancyListViewModel(
                     parseNewList(paginationInfo.items)
                 } else {
                     if (response.second == INTERNET_ERROR) {
-                        parseError(SearchScreenState.Error.NO_INTERNET_ERROR)
+                        parseError(SearchScreenState.Error.NoInternetError)
                     } else {
-                        parseError(SearchScreenState.Error.SERVER_ERROR)
+                        parseError(SearchScreenState.Error.ServerError)
                     }
                 }
             }
@@ -96,30 +94,30 @@ internal class VacancyListViewModel(
     }
 
     fun loadNextPageRequest() {
-        if (paginationInfo.page == paginationInfo.pages) {
+        if (paginationInfo.page >= paginationInfo.pages) {
             return
         }
 
-        _screenStateLiveData.postValue(SearchScreenState.LOADING_NEW_PAGE)
+        _screenStateLiveData.postValue(SearchScreenState.LoadingNewPage)
         val currentList = (vacancyListStateLiveData.value as VacancyListState.Content).vacancies
         viewModelScope.launch(Dispatchers.IO) {
             vacanciesInteractor.searchVacancies(
-                page = (currentPage + 1).toString(),
+                page = (paginationInfo.page + 1).toString(),
                 perPage = "${PAGE_SIZE}",
                 queryText = currentQuery,
-                industry = queryFilter.get("industry_id"),
-                salary = queryFilter.get("salary"),
-                area = queryFilter.get("area_id"),
-                onlyWithSalary = queryFilter.get("only_with_salary").toBoolean()
+                industry = queryFilter.get(INDUSTRY_ID),
+                salary = queryFilter.get(SALARY),
+                area = queryFilter.get(AREA_ID),
+                onlyWithSalary = queryFilter.get(ONLY_WITH_SALARY).toBoolean()
             ).collect { response ->
                 if (response.first != null) {
                     paginationInfo = response.first ?: paginationInfo
                     updateLists(currentList, paginationInfo.items)
                 } else {
                     if (response.second == INTERNET_ERROR) {
-                        parseError(SearchScreenState.Error.NEW_PAGE_NO_INTERNET_ERROR)
+                        parseError(SearchScreenState.Error.NewPageNoInternetError)
                     } else {
-                        parseError(SearchScreenState.Error.NEW_PAGE_SERVER_ERROR)
+                        parseError(SearchScreenState.Error.NewPageServerError)
                     }
                 }
             }
@@ -129,28 +127,34 @@ internal class VacancyListViewModel(
     private fun updateLists(oldList: List<Vacancy>, newList: List<Vacancy>) {
         val combinedList = oldList.toMutableList()
         combinedList.addAll(newList)
-        _screenStateLiveData.postValue(SearchScreenState.VACANCY_LIST_LOADED)
+        _screenStateLiveData.postValue(SearchScreenState.VacancyListLoaded)
         _vacancyListStateLiveData.postValue(VacancyListState.Content(combinedList))
         _currentResultsCountLiveData.postValue(paginationInfo.found)
     }
 
     private fun parseNewList(list: List<Vacancy>) {
         if (list.isEmpty()) {
-            _screenStateLiveData.postValue(SearchScreenState.Error.FAILED_TO_FETCH_VACANCIES_ERROR)
+            _screenStateLiveData.postValue(SearchScreenState.Error.FailedToFetchVacanciesError)
             _vacancyListStateLiveData.postValue(VacancyListState.Empty)
             _currentResultsCountLiveData.postValue(paginationInfo.found)
         } else {
-            _screenStateLiveData.postValue(SearchScreenState.VACANCY_LIST_LOADED)
+            _screenStateLiveData.postValue(SearchScreenState.VacancyListLoaded)
             _vacancyListStateLiveData.postValue(VacancyListState.Content(list))
             _currentResultsCountLiveData.postValue(paginationInfo.found)
         }
     }
 
     fun emptyList() {
-        _screenStateLiveData.postValue(SearchScreenState.IDLE)
+        _screenStateLiveData.postValue(SearchScreenState.Idle)
     }
 
     fun createTitle(model: Vacancy): String {
         return model.title + ", " + model.area.name + ""
+    }
+
+    fun checkFilterState(): Boolean {
+        initQueryFilter(vacanciesInteractor.getDataFilter())
+        return (queryFilter[INDUSTRY_ID] != null || queryFilter[AREA_ID] != null
+            || !queryFilter[SALARY].isNullOrBlank() || queryFilter[ONLY_WITH_SALARY].toBoolean())
     }
 }

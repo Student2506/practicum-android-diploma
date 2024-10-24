@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.filter.industry.domain.repository.IndustryRe
 import ru.practicum.android.diploma.filter.industry.domain.repository.IndustryRepositorySp
 import ru.practicum.android.diploma.filter.industry.domain.usecase.IndustryInteractor
 
-class IndustryInteractorImpl(
+internal class IndustryInteractorImpl(
     private val repositoryNetwork: IndustryRepositoryNetwork,
     private val repositorySp: IndustryRepositorySp,
 ) : IndustryInteractor {
@@ -26,11 +26,11 @@ class IndustryInteractorImpl(
         }
     }
 
-    override suspend fun updateProfessionInDataFilter(branchOfProfession: IndustryModel): Int {
-        return repositorySp.updateProfessionInDataFilter(branchOfProfession)
+    override suspend fun updateProfessionInDataFilterBuffer(branchOfProfession: IndustryModel): Int {
+        return repositorySp.updateProfessionInDataFilterBuffer(branchOfProfession)
     }
 
-    override suspend fun getBranchOfProfessionDataFilter(): IndustryModel? {
-        return repositorySp.getBranchOfProfessionDataFilter()
+    override suspend fun getBranchOfProfessionDataFilterBuffer(): IndustryModel? {
+        return repositorySp.getBranchOfProfessionDataFilterBuffer()
     }
 }

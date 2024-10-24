@@ -12,12 +12,13 @@
         style="@style/ButtonLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/dimens_24"
+        android:contentDescription="@string/back"
+        android:paddingVertical="@dimen/dp_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/regionHeader"
+        android:id="@+id/countryHeader"
         style="@style/TextViewMedium22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,11 +31,11 @@
         style="@style/PlacesList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/regionHeader" />
+        app:layout_constraintTop_toBottomOf="@id/countryHeader" />
 
     <LinearLayout
         android:id="@+id/llNoListError"
@@ -45,12 +46,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/regionHeader">
+        app:layout_constraintTop_toBottomOf="@id/countryHeader"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             style="@style/ErrorPicture"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimens_224"
+            android:layout_height="@dimen/dp_224"
+            android:importantForAccessibility="no"
             android:src="@drawable/il_6_1" />
 
         <TextView
@@ -61,5 +64,16 @@
             app:fontWeight="500" />
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        style="@style/LoadingProgressBarBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countryHeader" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

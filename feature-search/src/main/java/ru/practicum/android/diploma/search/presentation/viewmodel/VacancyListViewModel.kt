@@ -54,13 +54,13 @@ internal class VacancyListViewModel(
         readFilter(vacanciesInteractor.getDataFilterBuffer())
     }
 
-//    private fun initQueryFilter(filterSearch: FilterSearch) {
-//        vacanciesInteractor.getDataFilterBuffer()?.let {
-//            readFilter(it) ?: {
-//                vacanciesInteractor.getDataFilter()
-//            }
-//        }
-//    }
+    private fun initQueryFilter(filterSearch: FilterSearch) {
+        vacanciesInteractor.getDataFilterBuffer()?.let {
+            readFilter(it) ?: {
+                vacanciesInteractor.getDataFilter()
+            }
+        }
+    }
 
     private fun readFilter(filterSearch: FilterSearch) {
         queryFilter.clear()

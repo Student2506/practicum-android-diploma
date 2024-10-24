@@ -69,6 +69,7 @@ internal class VacancyListViewModel(
         _forceSearchLiveData.postValue(filterSearch.forceSearch)
     }
 
+    @Suppress("detekt.ComplexCondition")
     fun updateIcon() {
         initQueryFilter(vacanciesInteractor.getDataFilterBuffer())
         if (queryFilter.get(INDUSTRY_ID).isNullOrEmpty() && queryFilter.get(SALARY).isNullOrEmpty() &&
@@ -80,7 +81,6 @@ internal class VacancyListViewModel(
         }
     }
 
-    @Suppress("detekt.ComplexCondition")
     fun initialSearch(query: String) {
         if (query == currentQuery && !_forceSearchLiveData.value!!) {
             return
@@ -89,7 +89,6 @@ internal class VacancyListViewModel(
         currentQuery = query
 
         viewModelScope.launch(Dispatchers.IO) {
-
             queryFilterContinue = queryFilter.toMap()
             vacanciesInteractor.searchVacancies(
                 page = "0",

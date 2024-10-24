@@ -24,4 +24,6 @@ internal interface VacanciesInteractor {
     fun listIndustries(): Flow<Pair<List<IndustryList>?, String?>>
 
     fun getDataFilter(): FilterSearch
+    fun forceSearch()
+    fun getDataFilterBuffer(): FilterSearch
 }

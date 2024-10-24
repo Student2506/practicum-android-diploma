@@ -71,12 +71,17 @@ internal class SearchFragment : Fragment() {
         if (savedInstanceState != null) {
             userInputReserve = savedInstanceState.getString(USER_INPUT, "")
         }
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+    override fun onStart() {
+        super.onStart()
+        vacancyListViewModel.updateIcon()
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -111,6 +116,28 @@ internal class SearchFragment : Fragment() {
                 localVacancyList = state.vacancies as ArrayList<Vacancy>
                 (binding.vacancyRecycler.adapter as VacancyListAdapter).setVacancies(localVacancyList)
                 binding.vacancyRecycler.adapter?.notifyDataSetChanged()
+            }
+        }
+
+        vacancyListViewModel.forceSearchLiveData.observe(viewLifecycleOwner) { searchRequired ->
+            if (searchRequired && binding.searchBar.text.isNotEmpty()) {
+                debouncedSearch(binding.searchBar.text.toString())
+            }
+        }
+
+        vacancyListViewModel.enableIconLiveData.observe(viewLifecycleOwner) { enable ->
+            val filterOnDrawable = AppCompatResources.getDrawable(
+                requireContext(),
+                ru.practicum.android.diploma.ui.R.drawable.search_filter_on_state
+            )
+            val filterOffDrawable = AppCompatResources.getDrawable(
+                requireContext(),
+                ru.practicum.android.diploma.ui.R.drawable.filter
+            )
+            if (enable) {
+                binding.filter.setImageDrawable(filterOnDrawable)
+            } else {
+                binding.filter.setImageDrawable(filterOffDrawable)
             }
         }
 
@@ -152,11 +179,14 @@ internal class SearchFragment : Fragment() {
 
     private fun searchBarSetup() {
         binding.searchBar.doOnTextChanged { text, _, _, _ ->
+
             if (text?.isNotEmpty() == true) {
                 binding.clearSearchIcon.isVisible = true
                 binding.searchBarLoupeIcon.isVisible = false
-                localVacancyList = ArrayList()
-                debouncedSearch(text.toString())
+                if (binding.searchBar.hasFocus()) { // prevents automatic searches on returning to this screen
+                    localVacancyList = ArrayList()
+                    debouncedSearch(text.toString())
+                }
             } else {
                 binding.clearSearchIcon.isVisible = false
                 binding.searchBarLoupeIcon.isVisible = true
@@ -168,6 +198,7 @@ internal class SearchFragment : Fragment() {
             binding.searchBar.text.clear()
             requireContext().closeKeyBoard(binding.searchBar)
             vacancyListViewModel.emptyList()
+            vacancyListViewModel.enableSearch()
         }
     }
 

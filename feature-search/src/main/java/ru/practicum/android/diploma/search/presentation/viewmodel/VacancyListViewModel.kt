@@ -69,6 +69,17 @@ internal class VacancyListViewModel(
         _forceSearchLiveData.postValue(filterSearch.forceSearch)
     }
 
+    fun updateIcon() {
+        initQueryFilter(vacanciesInteractor.getDataFilterBuffer())
+        if (queryFilter.get(INDUSTRY_ID).isNullOrEmpty() && queryFilter.get(SALARY).isNullOrEmpty() &&
+            queryFilter.get(AREA_ID).isNullOrEmpty() && !queryFilter.get(ONLY_WITH_SALARY).toBoolean()
+        ) {
+            _enableIconLiveData.postValue(false)
+        } else {
+            _enableIconLiveData.postValue(true)
+        }
+    }
+
     @Suppress("detekt.ComplexCondition")
     fun initialSearch(query: String) {
         if (query == currentQuery && !_forceSearchLiveData.value!!) {
@@ -78,15 +89,7 @@ internal class VacancyListViewModel(
         currentQuery = query
 
         viewModelScope.launch(Dispatchers.IO) {
-            if (queryFilter.get(INDUSTRY_ID).isNullOrEmpty() && queryFilter.get(SALARY).isNullOrEmpty() &&
-                queryFilter.get(AREA_ID).isNullOrEmpty() && queryFilter.get(ONLY_WITH_SALARY).toBoolean()
-            ) {
-                _enableIconLiveData.postValue(false)
-                initQueryFilter(vacanciesInteractor.getDataFilter())
-            } else {
-                _enableIconLiveData.postValue(true)
-                initQueryFilter(vacanciesInteractor.getDataFilterBuffer())
-            }
+
             queryFilterContinue = queryFilter.toMap()
             vacanciesInteractor.searchVacancies(
                 page = "0",

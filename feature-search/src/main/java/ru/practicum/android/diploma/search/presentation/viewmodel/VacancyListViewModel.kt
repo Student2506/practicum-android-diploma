@@ -75,13 +75,15 @@ internal class VacancyListViewModel(
     fun updateIcon() {
         initQueryFilter(vacanciesInteractor.getDataFilterBuffer())
         if (queryFilter.get(INDUSTRY_ID).isNullOrEmpty() && queryFilter.get(SALARY).isNullOrEmpty() &&
-            queryFilter.get(AREA_ID).isNullOrEmpty() &&  queryFilter.get(ONLY_WITH_SALARY).toBoolean() == isLastSalaryStatus
+            queryFilter.get(AREA_ID).isNullOrEmpty() && queryFilter.get(ONLY_WITH_SALARY)
+                .toBoolean() == isLastSalaryStatus
         ) {
             _enableIconLiveData.postValue(false)
         } else {
             _enableIconLiveData.postValue(true)
             isLastSalaryStatus = queryFilter.get(ONLY_WITH_SALARY).toBoolean()
         }
+
     }
 
     fun initialSearch(query: String) {

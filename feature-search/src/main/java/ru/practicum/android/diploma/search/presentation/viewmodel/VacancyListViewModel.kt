@@ -47,6 +47,8 @@ internal class VacancyListViewModel(
     private val queryFilter: MutableMap<String, String> = mutableMapOf()
     private var queryFilterContinue: Map<String, String>? = null
 
+    private var isLastSalaryStatus = false
+
     init {
         _screenStateLiveData.value = SearchScreenState.Idle
         _vacancyListStateLiveData.value = VacancyListState.Empty
@@ -73,11 +75,12 @@ internal class VacancyListViewModel(
     fun updateIcon() {
         initQueryFilter(vacanciesInteractor.getDataFilterBuffer())
         if (queryFilter.get(INDUSTRY_ID).isNullOrEmpty() && queryFilter.get(SALARY).isNullOrEmpty() &&
-            queryFilter.get(AREA_ID).isNullOrEmpty() && !queryFilter.get(ONLY_WITH_SALARY).toBoolean()
+            queryFilter.get(AREA_ID).isNullOrEmpty() &&  queryFilter.get(ONLY_WITH_SALARY).toBoolean() == isLastSalaryStatus
         ) {
             _enableIconLiveData.postValue(false)
         } else {
             _enableIconLiveData.postValue(true)
+            isLastSalaryStatus = queryFilter.get(ONLY_WITH_SALARY).toBoolean()
         }
     }
 

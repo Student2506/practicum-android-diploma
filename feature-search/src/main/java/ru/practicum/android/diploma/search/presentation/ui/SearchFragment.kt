@@ -71,6 +71,12 @@ internal class SearchFragment : Fragment() {
         if (savedInstanceState != null) {
             userInputReserve = savedInstanceState.getString(USER_INPUT, "")
         }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        vacancyListViewModel.updateIcon()
     }
 
     override fun onDestroyView() {
@@ -116,6 +122,22 @@ internal class SearchFragment : Fragment() {
         vacancyListViewModel.forceSearchLiveData.observe(viewLifecycleOwner) { searchRequired ->
             if (searchRequired && binding.searchBar.text.isNotEmpty()) {
                 debouncedSearch(binding.searchBar.text.toString())
+            }
+        }
+
+        vacancyListViewModel.enableIconLiveData.observe(viewLifecycleOwner) { enable ->
+            val filterOnDrawable = AppCompatResources.getDrawable(
+                requireContext(),
+                ru.practicum.android.diploma.ui.R.drawable.search_filter_on_state
+            )
+            val filterOffDrawable = AppCompatResources.getDrawable(
+                requireContext(),
+                ru.practicum.android.diploma.ui.R.drawable.filter
+            )
+            if (enable) {
+                binding.filter.setImageDrawable(filterOnDrawable)
+            } else {
+                binding.filter.setImageDrawable(filterOffDrawable)
             }
         }
 

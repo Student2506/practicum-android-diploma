@@ -51,22 +51,28 @@ internal class VacancyListViewModel(
         _screenStateLiveData.value = SearchScreenState.Idle
         _vacancyListStateLiveData.value = VacancyListState.Empty
         _currentResultsCountLiveData.value = 0
-        initQueryFilter(vacanciesInteractor.getDataFilter())
+        readFilter(vacanciesInteractor.getDataFilterBuffer())
     }
 
-    private fun initQueryFilter(filterSearch: FilterSearch) {
-        queryFilter.remove(INDUSTRY_ID)
-        queryFilter.remove(AREA_ID)
+//    private fun initQueryFilter(filterSearch: FilterSearch) {
+//        vacanciesInteractor.getDataFilterBuffer()?.let {
+//            readFilter(it) ?: {
+//                vacanciesInteractor.getDataFilter()
+//            }
+//        }
+//    }
+
+    private fun readFilter(filterSearch: FilterSearch) {
+        queryFilter.clear()
         filterSearch.branchOfProfession?.id?.let { queryFilter.put(INDUSTRY_ID, it) }
         filterSearch.expectedSalary?.let { queryFilter.put(SALARY, it) }
         filterSearch.doNotShowWithoutSalary.let { queryFilter.put(ONLY_WITH_SALARY, it.toString()) }
         filterSearch.placeSearch?.let { place ->
-            place.idCountry?.let { queryFilter.put(AREA_ID, it) }
+            place.idRegion?.let { queryFilter.put(AREA_ID, it) } ?: {
+                place.idCountry?.let { queryFilter.put(AREA_ID, it) }
+            }
         }
-        filterSearch.placeSearch?.let { place ->
-            place.idRegion?.let { queryFilter.put(AREA_ID, it) }
-        }
-        _forceSearchLiveData.postValue(filterSearch.forceSearch)
+//        _forceSearchLiveData.postValue(filterSearch.forceSearch)
     }
 
     @Suppress("detekt.ComplexCondition")
@@ -82,10 +88,10 @@ internal class VacancyListViewModel(
                 queryFilter.get(AREA_ID).isNullOrEmpty() && queryFilter.get(ONLY_WITH_SALARY).toBoolean()
             ) {
                 _enableIconLiveData.postValue(false)
-                initQueryFilter(vacanciesInteractor.getDataFilter())
+                readFilter(vacanciesInteractor.getDataFilter())
             } else {
                 _enableIconLiveData.postValue(true)
-                initQueryFilter(vacanciesInteractor.getDataFilterBuffer())
+                readFilter(vacanciesInteractor.getDataFilterBuffer())
             }
             queryFilterContinue = queryFilter.toMap()
             vacanciesInteractor.searchVacancies(
@@ -180,7 +186,7 @@ internal class VacancyListViewModel(
     }
 
     fun checkFilterState(): Boolean {
-        initQueryFilter(vacanciesInteractor.getDataFilter())
+        readFilter(vacanciesInteractor.getDataFilter())
         return (queryFilter[INDUSTRY_ID] != null || queryFilter[AREA_ID] != null
             || !queryFilter[SALARY].isNullOrBlank() || queryFilter[ONLY_WITH_SALARY].toBoolean())
     }

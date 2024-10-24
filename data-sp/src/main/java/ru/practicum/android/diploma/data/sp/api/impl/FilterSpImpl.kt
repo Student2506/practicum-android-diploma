@@ -75,19 +75,14 @@ class FilterSpImpl(
 
     override fun getDataFilter(): FilterDto {
         val json = filterSp.getString(FILTER_KEY_SP, null)
-        if (json != null) {
-            var retrievedFilter = gson.fromJson(json, FilterDto::class.java)
-            if (isForceSearchEnabled()) retrievedFilter = retrievedFilter.copy(forceSearch = true) //
-            // updateDataFilterBuffer (most likely) messes up the forceSearch Settings, json always has it as false...
-            disableForceSearch() // precaution against SP's forceSearch somehow remaining as true
-            return retrievedFilter
+        return if (json != null) {
+            gson.fromJson(json, FilterDto::class.java)
         } else {
-            return FilterDto(
+            FilterDto(
                 placeDto = null,
                 branchOfProfession = null,
                 expectedSalary = "",
-                doNotShowWithoutSalary = false,
-                forceSearch = false,
+                doNotShowWithoutSalary = false
             )
         }
     }
@@ -109,8 +104,7 @@ class FilterSpImpl(
             placeDto = getPlaceDataFilterBuffer(),
             branchOfProfession = getBranchOfProfessionDataFilterBuffer(),
             expectedSalary = getExpectedSalaryDataFilterBuffer(),
-            doNotShowWithoutSalary = isDoNotShowWithoutSalaryDataFilterBuffer(),
-            forceSearch = isForceSearchEnabled(),
+            doNotShowWithoutSalary = isDoNotShowWithoutSalaryDataFilterBuffer()
         )
     }
 

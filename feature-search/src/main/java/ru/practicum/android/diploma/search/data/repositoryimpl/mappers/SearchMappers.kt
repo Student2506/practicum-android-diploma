@@ -21,7 +21,6 @@ internal object SearchMappers {
                 ),
                 expectedSalary = expectedSalary,
                 doNotShowWithoutSalary = doNotShowWithoutSalary,
-                forceSearch = forceSearch
             )
         }
     }

@@ -100,10 +100,10 @@ internal class VacancyListViewModel(
         if (query == currentQuery && !_forceSearchLiveData.value!!) {
             return
         }
+        currentQuery = query
         viewModelScope.launch(Dispatchers.IO) {
             if (query.isNotEmpty()) {
                 _screenStateLiveData.postValue(SearchScreenState.LoadingNewList)
-                currentQuery = query
                 queryFilterContinue = queryFilter.toMap()
                 vacanciesInteractor.searchVacancies(
                     page = "0",

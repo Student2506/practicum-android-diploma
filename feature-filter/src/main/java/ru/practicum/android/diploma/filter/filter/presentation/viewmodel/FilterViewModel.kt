@@ -4,13 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.filter.domain.model.FilterSettings
 import ru.practicum.android.diploma.filter.filter.domain.usecase.FilterSPInteractor
 
 internal class FilterViewModel(
-    private val filterSPInteractor: FilterSPInteractor
+    private val filterSPInteractor: FilterSPInteractor,
 ) : ViewModel() {
 
     private var _filterOptionsBufferLiveData: MutableLiveData<FilterSettings> = MutableLiveData<FilterSettings>()

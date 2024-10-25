@@ -188,7 +188,7 @@ internal class VacancyListViewModel(
     fun checkFilterState(): Boolean {
         initQueryFilter(vacanciesInteractor.getDataFilterBuffer())
         return (queryFilter[INDUSTRY_ID] != null || queryFilter[AREA_ID] != null
-            || !queryFilter[SALARY].isNullOrBlank() || !queryFilter.get(ONLY_WITH_SALARY)
-            .toBoolean() == isLastSalaryStatus)
+            || !queryFilter[SALARY].isNullOrBlank()
+            || !queryFilter.get(ONLY_WITH_SALARY).toBoolean() == isLastSalaryStatus)
     }
 }

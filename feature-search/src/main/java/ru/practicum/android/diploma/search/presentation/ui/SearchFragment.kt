@@ -169,7 +169,13 @@ internal class SearchFragment : Fragment() {
 
             if (binding.searchBar.hasFocus()) {
                 localVacancyList.clear()
-                debouncedSearch(text.toString())
+                val textSearch = text.toString()
+                if (textSearch.isNotEmpty()) {
+                    debouncedSearch(textSearch)
+                }
+                if(textSearch.isEmpty()) {
+                    vacancyListViewModel.initialSearch(textSearch)
+                }
             }
 
             if (text?.isNotEmpty() == true) {

@@ -53,12 +53,6 @@ internal class VacancyListViewModel(
         _currentResultsCountLiveData.value = 0
     }
 
-    fun isForceSearchEnabled() {
-        viewModelScope.launch {
-            _forceSearchLiveData.postValue(vacanciesInteractor.isForceSearchEnabled())
-        }
-    }
-
     fun dropForceSearch() {
         viewModelScope.launch {
             vacanciesInteractor.dropForceSearch()
@@ -67,8 +61,11 @@ internal class VacancyListViewModel(
 
     fun initQueryFilter() {
         viewModelScope.launch {
+            val isForceSearchEnabled = vacanciesInteractor.isForceSearchEnabled()
+            _forceSearchLiveData.postValue(isForceSearchEnabled)
+
             val filterBuffer = vacanciesInteractor.getDataFilterBuffer()
-            val hasFilter = if (filterBuffer != FilterSearch.emptyFilterSearch()) {
+            val hasFilter = if (filterBuffer != FilterSearch.emptyFilterSearch() && !isForceSearchEnabled) {
                 readFilter(filterBuffer)
                 true
             } else {

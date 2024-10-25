@@ -71,7 +71,6 @@ internal class SearchFragment : Fragment() {
         if (savedInstanceState != null) {
             userInputReserve = savedInstanceState.getString(USER_INPUT, "")
         }
-
     }
 
     override fun onDestroyView() {
@@ -85,7 +84,6 @@ internal class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         vacancyListViewModel.initQueryFilter()
-        vacancyListViewModel.isForceSearchEnabled()
 
         searchBarSetup()
 

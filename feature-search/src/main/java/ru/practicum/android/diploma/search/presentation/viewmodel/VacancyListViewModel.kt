@@ -62,12 +62,12 @@ internal class VacancyListViewModel(
     fun initQueryFilter() {
         viewModelScope.launch {
             val filterBuffer = vacanciesInteractor.getDataFilterBuffer()
-            val hasFilter = if(filterBuffer != FilterSearch.emptyFilterSearch()) {
+            val hasFilter = if (filterBuffer != FilterSearch.emptyFilterSearch()) {
                 readFilter(filterBuffer)
                 true
             } else {
                 val filter = vacanciesInteractor.getDataFilter()
-                if(filter != FilterSearch.emptyFilterSearch()) {
+                if (filter != FilterSearch.emptyFilterSearch()) {
                     readFilter(filter)
                     true
                 } else {
@@ -82,7 +82,7 @@ internal class VacancyListViewModel(
     private fun readFilter(filterSearch: FilterSearch) {
         queryFilter.clear()
         filterSearch.branchOfProfession?.id?.let { queryFilter.put(INDUSTRY_ID, it) }
-        filterSearch.expectedSalary?.let { if(it.isNotEmpty()) queryFilter.put(SALARY, it) }
+        filterSearch.expectedSalary?.let { if (it.isNotEmpty()) queryFilter.put(SALARY, it) }
         filterSearch.doNotShowWithoutSalary.let { queryFilter.put(ONLY_WITH_SALARY, it.toString()) }
         filterSearch.placeSearch?.let { place ->
             place.idRegion?.let { queryFilter.put(AREA_ID, it) } ?: {
@@ -99,9 +99,7 @@ internal class VacancyListViewModel(
         currentQuery = query
 
         viewModelScope.launch(Dispatchers.IO) {
-            if (queryFilter.get(INDUSTRY_ID).isNullOrEmpty() && queryFilter.get(SALARY).isNullOrEmpty() &&
-                queryFilter.get(AREA_ID).isNullOrEmpty() && queryFilter.get(ONLY_WITH_SALARY).toBoolean()
-            ) {
+            if (isQueryFilterEmpty()) {
                 _enableIconLiveData.postValue(false)
                 readFilter(vacanciesInteractor.getDataFilter())
             } else {
@@ -131,6 +129,13 @@ internal class VacancyListViewModel(
                 }
             }
         }
+    }
+
+    private fun isQueryFilterEmpty(): Boolean {
+        return queryFilter.get(INDUSTRY_ID).isNullOrEmpty() &&
+            queryFilter.get(SALARY).isNullOrEmpty() &&
+            queryFilter.get(AREA_ID).isNullOrEmpty() &&
+            queryFilter.get(ONLY_WITH_SALARY).toBoolean()
     }
 
     private fun parseError(state: SearchScreenState) {

@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.search.presentation.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -92,6 +93,7 @@ internal class VacancyListViewModel(
                 place.idCountry?.let { queryFilter.put(AREA_ID, it) }
             }
         }
+        Log.e("queryFilter", "queryFilter $queryFilter")
     }
 
     fun initialSearch(query: String) {
@@ -103,10 +105,8 @@ internal class VacancyListViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             if (isQueryFilterEmpty()) {
-                _enableIconLiveData.postValue(false)
                 readFilter(vacanciesInteractor.getDataFilter())
             } else {
-                _enableIconLiveData.postValue(true)
                 readFilter(vacanciesInteractor.getDataFilterBuffer())
             }
 

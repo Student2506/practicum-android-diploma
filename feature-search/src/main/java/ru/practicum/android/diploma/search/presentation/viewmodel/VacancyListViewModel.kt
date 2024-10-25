@@ -51,28 +51,44 @@ internal class VacancyListViewModel(
         _screenStateLiveData.value = SearchScreenState.Idle
         _vacancyListStateLiveData.value = VacancyListState.Empty
         _currentResultsCountLiveData.value = 0
-        readFilter(vacanciesInteractor.getDataFilterBuffer())
     }
 
-    private fun initQueryFilter(filterSearch: FilterSearch) {
-        vacanciesInteractor.getDataFilterBuffer()?.let {
-            readFilter(it) ?: {
-                vacanciesInteractor.getDataFilter()
+    fun isForceSearchEnabled() {
+        viewModelScope.launch {
+            _forceSearchLiveData.postValue(vacanciesInteractor.isForceSearchEnabled())
+        }
+    }
+
+    fun initQueryFilter() {
+        viewModelScope.launch {
+            val filterBuffer = vacanciesInteractor.getDataFilterBuffer()
+            val hasFilter = if(filterBuffer != FilterSearch.emptyFilterSearch()) {
+                readFilter(filterBuffer)
+                true
+            } else {
+                val filter = vacanciesInteractor.getDataFilter()
+                if(filter != FilterSearch.emptyFilterSearch()) {
+                    readFilter(filter)
+                    true
+                } else {
+                    queryFilter.clear()
+                    false
+                }
             }
+            _enableIconLiveData.postValue(hasFilter)
         }
     }
 
     private fun readFilter(filterSearch: FilterSearch) {
         queryFilter.clear()
         filterSearch.branchOfProfession?.id?.let { queryFilter.put(INDUSTRY_ID, it) }
-        filterSearch.expectedSalary?.let { queryFilter.put(SALARY, it) }
+        filterSearch.expectedSalary?.let { if(it.isNotEmpty()) queryFilter.put(SALARY, it) }
         filterSearch.doNotShowWithoutSalary.let { queryFilter.put(ONLY_WITH_SALARY, it.toString()) }
         filterSearch.placeSearch?.let { place ->
             place.idRegion?.let { queryFilter.put(AREA_ID, it) } ?: {
                 place.idCountry?.let { queryFilter.put(AREA_ID, it) }
             }
         }
-//        _forceSearchLiveData.postValue(filterSearch.forceSearch)
     }
 
     @Suppress("detekt.ComplexCondition")
@@ -176,18 +192,7 @@ internal class VacancyListViewModel(
         _screenStateLiveData.postValue(SearchScreenState.Idle)
     }
 
-    fun enableSearch() {
-        vacanciesInteractor.forceSearch()
-        _forceSearchLiveData.value = true
-    }
-
     fun createTitle(model: Vacancy): String {
         return model.title + ", " + model.area.name + ""
-    }
-
-    fun checkFilterState(): Boolean {
-        readFilter(vacanciesInteractor.getDataFilter())
-        return (queryFilter[INDUSTRY_ID] != null || queryFilter[AREA_ID] != null
-            || !queryFilter[SALARY].isNullOrBlank() || queryFilter[ONLY_WITH_SALARY].toBoolean())
     }
 }

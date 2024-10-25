@@ -173,7 +173,7 @@ internal class SearchFragment : Fragment() {
                 if (textSearch.isNotEmpty()) {
                     debouncedSearch(textSearch)
                 }
-                if(textSearch.isEmpty()) {
+                if (textSearch.isEmpty()) {
                     vacancyListViewModel.initialSearch(textSearch)
                 }
             }

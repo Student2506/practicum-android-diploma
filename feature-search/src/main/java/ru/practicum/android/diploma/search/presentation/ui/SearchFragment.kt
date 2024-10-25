@@ -71,6 +71,12 @@ internal class SearchFragment : Fragment() {
         if (savedInstanceState != null) {
             userInputReserve = savedInstanceState.getString(USER_INPUT, "")
         }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        vacancyListViewModel.updateIcon()
     }
 
     override fun onDestroyView() {

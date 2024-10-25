@@ -76,7 +76,7 @@ internal class SearchFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        vacancyListViewModel.updateIcon()
+        setFilterIcon()
     }
 
     override fun onDestroyView() {

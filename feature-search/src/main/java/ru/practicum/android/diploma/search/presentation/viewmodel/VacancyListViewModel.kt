@@ -53,7 +53,7 @@ internal class VacancyListViewModel(
         _screenStateLiveData.value = SearchScreenState.Idle
         _vacancyListStateLiveData.value = VacancyListState.Empty
         _currentResultsCountLiveData.value = 0
-        initQueryFilter(vacanciesInteractor.getDataFilter())
+
     }
 
     private fun initQueryFilter(filterSearch: FilterSearch) {
@@ -75,7 +75,7 @@ internal class VacancyListViewModel(
     fun updateIcon() {
         initQueryFilter(vacanciesInteractor.getDataFilterBuffer())
         if (queryFilter.get(INDUSTRY_ID).isNullOrEmpty() && queryFilter.get(SALARY).isNullOrEmpty() &&
-            queryFilter.get(AREA_ID).isNullOrEmpty() && queryFilter.get(ONLY_WITH_SALARY)
+            queryFilter.get(AREA_ID).isNullOrEmpty() && !queryFilter.get(ONLY_WITH_SALARY)
                 .toBoolean() == isLastSalaryStatus
         ) {
             _enableIconLiveData.postValue(false)
@@ -83,7 +83,6 @@ internal class VacancyListViewModel(
             _enableIconLiveData.postValue(true)
             isLastSalaryStatus = queryFilter.get(ONLY_WITH_SALARY).toBoolean()
         }
-
     }
 
     fun initialSearch(query: String) {
@@ -187,8 +186,9 @@ internal class VacancyListViewModel(
     }
 
     fun checkFilterState(): Boolean {
-        initQueryFilter(vacanciesInteractor.getDataFilter())
+        initQueryFilter(vacanciesInteractor.getDataFilterBuffer())
         return (queryFilter[INDUSTRY_ID] != null || queryFilter[AREA_ID] != null
-            || !queryFilter[SALARY].isNullOrBlank() || queryFilter[ONLY_WITH_SALARY].toBoolean())
+            || !queryFilter[SALARY].isNullOrBlank() || !queryFilter.get(ONLY_WITH_SALARY)
+            .toBoolean() == isLastSalaryStatus)
     }
 }

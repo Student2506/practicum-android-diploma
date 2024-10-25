@@ -9,5 +9,4 @@ data class FilterDto(
     val branchOfProfession: IndustryDto?,
     val expectedSalary: String?,
     val doNotShowWithoutSalary: Boolean,
-    val forceSearch: Boolean,
 ) : Parcelable

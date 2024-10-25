@@ -96,6 +96,7 @@ internal class FilterFragment : Fragment() {
                     findNavController().navigateUp()
                 }
                 R.id.buttonBack -> {
+                    viewModel.copyDataFilterBufferInDataFilter()
                     findNavController().navigateUp()
                 }
                 R.id.buttonCancel -> {

@@ -167,13 +167,18 @@ internal class SearchFragment : Fragment() {
     private fun searchBarSetup() {
         binding.searchBar.doOnTextChanged { text, _, _, _ ->
 
+            if (binding.searchBar.hasFocus()) {
+                localVacancyList.clear()
+                val textSearch = text.toString()
+                debouncedSearch(textSearch)
+                if (textSearch.isEmpty()) {
+                    vacancyListViewModel.emptyList()
+                }
+            }
+
             if (text?.isNotEmpty() == true) {
                 binding.clearSearchIcon.isVisible = true
                 binding.searchBarLoupeIcon.isVisible = false
-                if (binding.searchBar.hasFocus()) { // prevents automatic searches on returning to this screen
-                    localVacancyList = ArrayList()
-                    debouncedSearch(text.toString())
-                }
             } else {
                 binding.clearSearchIcon.isVisible = false
                 binding.searchBarLoupeIcon.isVisible = true

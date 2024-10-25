@@ -100,45 +100,33 @@ internal class VacancyListViewModel(
         if (query == currentQuery && !_forceSearchLiveData.value!!) {
             return
         }
-        _screenStateLiveData.postValue(SearchScreenState.LoadingNewList)
         currentQuery = query
-
         viewModelScope.launch(Dispatchers.IO) {
-            if (isQueryFilterEmpty()) {
-                readFilter(vacanciesInteractor.getDataFilter())
-            } else {
-                readFilter(vacanciesInteractor.getDataFilterBuffer())
-            }
-
-            queryFilterContinue = queryFilter.toMap()
-            vacanciesInteractor.searchVacancies(
-                page = "0",
-                perPage = "${PAGE_SIZE}",
-                queryText = query,
-                industry = queryFilter.get(INDUSTRY_ID),
-                salary = queryFilter.get(SALARY),
-                area = queryFilter.get(AREA_ID),
-                onlyWithSalary = queryFilter.get(ONLY_WITH_SALARY).toBoolean()
-            ).collect { response ->
-                if (response.first != null) {
-                    paginationInfo = response.first ?: paginationInfo
-                    parseNewList(paginationInfo.items)
-                } else {
-                    if (response.second == INTERNET_ERROR) {
-                        parseError(SearchScreenState.Error.NoInternetError)
+            if (query.isNotEmpty()) {
+                _screenStateLiveData.postValue(SearchScreenState.LoadingNewList)
+                queryFilterContinue = queryFilter.toMap()
+                vacanciesInteractor.searchVacancies(
+                    page = "0",
+                    perPage = "${PAGE_SIZE}",
+                    queryText = query,
+                    industry = queryFilter.get(INDUSTRY_ID),
+                    salary = queryFilter.get(SALARY),
+                    area = queryFilter.get(AREA_ID),
+                    onlyWithSalary = queryFilter.get(ONLY_WITH_SALARY).toBoolean()
+                ).collect { response ->
+                    if (response.first != null) {
+                        paginationInfo = response.first ?: paginationInfo
+                        parseNewList(paginationInfo.items)
                     } else {
-                        parseError(SearchScreenState.Error.ServerError)
+                        if (response.second == INTERNET_ERROR) {
+                            parseError(SearchScreenState.Error.NoInternetError)
+                        } else {
+                            parseError(SearchScreenState.Error.ServerError)
+                        }
                     }
                 }
             }
         }
-    }
-
-    private fun isQueryFilterEmpty(): Boolean {
-        return queryFilter.get(INDUSTRY_ID).isNullOrEmpty() &&
-            queryFilter.get(SALARY).isNullOrEmpty() &&
-            queryFilter.get(AREA_ID).isNullOrEmpty() &&
-            queryFilter.get(ONLY_WITH_SALARY).toBoolean()
     }
 
     private fun parseError(state: SearchScreenState) {

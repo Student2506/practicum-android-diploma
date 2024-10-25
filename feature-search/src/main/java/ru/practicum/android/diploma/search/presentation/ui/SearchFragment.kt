@@ -171,7 +171,7 @@ internal class SearchFragment : Fragment() {
                 localVacancyList.clear()
                 val textSearch = text.toString()
                 debouncedSearch(textSearch)
-                if (textSearch.isEmpty()){
+                if (textSearch.isEmpty()) {
                     vacancyListViewModel.emptyList()
                 }
             }

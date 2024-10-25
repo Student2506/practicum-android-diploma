@@ -172,8 +172,7 @@ internal class SearchFragment : Fragment() {
                 val textSearch = text.toString()
                 if (textSearch.isNotEmpty()) {
                     debouncedSearch(textSearch)
-                }
-                if (textSearch.isEmpty()) {
+                } else if (textSearch.isEmpty()){
                     vacancyListViewModel.initialSearch(textSearch)
                 }
             }

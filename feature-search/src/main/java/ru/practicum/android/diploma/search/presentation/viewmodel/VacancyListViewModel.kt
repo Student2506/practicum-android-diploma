@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.search.presentation.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -89,11 +88,12 @@ internal class VacancyListViewModel(
         filterSearch.expectedSalary?.let { if (it.isNotEmpty()) queryFilter.put(SALARY, it) }
         filterSearch.doNotShowWithoutSalary.let { queryFilter.put(ONLY_WITH_SALARY, it.toString()) }
         filterSearch.placeSearch?.let { place ->
-            place.idRegion?.let { queryFilter.put(AREA_ID, it) } ?: {
+            if (place.idRegion != null) {
+                queryFilter.put(AREA_ID, place.idRegion)
+            } else {
                 place.idCountry?.let { queryFilter.put(AREA_ID, it) }
             }
         }
-        Log.e("queryFilter", "queryFilter $queryFilter")
     }
 
     fun initialSearch(query: String) {

@@ -59,6 +59,12 @@ internal class VacancyListViewModel(
         }
     }
 
+    fun dropForceSearch() {
+        viewModelScope.launch {
+            vacanciesInteractor.dropForceSearch()
+        }
+    }
+
     fun initQueryFilter() {
         viewModelScope.launch {
             val filterBuffer = vacanciesInteractor.getDataFilterBuffer()

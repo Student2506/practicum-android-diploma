@@ -5,5 +5,6 @@ import ru.practicum.android.diploma.search.domain.models.sp.FilterSearch
 internal interface SearchRepositorySp {
     suspend fun getDataFilter(): FilterSearch
     suspend fun isForceSearchEnabled(): Boolean
+    suspend fun dropForceSearch()
     suspend fun getDataFilterBuffer(): FilterSearch
 }

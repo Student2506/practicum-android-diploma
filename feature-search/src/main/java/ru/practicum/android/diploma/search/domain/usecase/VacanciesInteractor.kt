@@ -25,5 +25,6 @@ internal interface VacanciesInteractor {
 
     suspend fun getDataFilter(): FilterSearch
     suspend fun isForceSearchEnabled(): Boolean
+    suspend fun dropForceSearch()
     suspend fun getDataFilterBuffer(): FilterSearch
 }

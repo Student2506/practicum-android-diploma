@@ -16,6 +16,10 @@ internal class SearchRepositorySpImpl(
         return filterSp.isForceSearchEnabled()
     }
 
+    override suspend fun dropForceSearch() {
+        return filterSp.disableForceSearch()
+    }
+
     override suspend fun getDataFilterBuffer(): FilterSearch {
         return SearchMappers.map(filterSp.getDataFilterBuffer())
     }

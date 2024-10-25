@@ -89,6 +89,10 @@ internal class VacanciesInteractorImpl(
         return searchRepositorySp.isForceSearchEnabled()
     }
 
+    override suspend fun dropForceSearch() {
+        return searchRepositorySp.dropForceSearch()
+    }
+
     override suspend fun getDataFilterBuffer(): FilterSearch {
         return searchRepositorySp.getDataFilterBuffer()
     }

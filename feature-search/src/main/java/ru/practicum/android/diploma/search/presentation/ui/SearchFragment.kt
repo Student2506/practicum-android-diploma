@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.search.presentation.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +46,7 @@ internal class SearchFragment : Fragment() {
             useLastParam = true,
             actionThenDelay = false,
             action = { param: String ->
+                Log.e("debouncedSearch", "debouncedSearch ${param}")
                 vacancyListViewModel.initialSearch(param)
             }
         )
@@ -116,7 +118,7 @@ internal class SearchFragment : Fragment() {
 
         vacancyListViewModel.forceSearchLiveData.observe(viewLifecycleOwner) { searchRequired ->
             if (searchRequired && binding.searchBar.text.isNotEmpty()) {
-                vacancyListViewModel.initialSearch(binding.searchBar.text.toString())
+                debouncedSearch(binding.searchBar.text.toString())
             }
         }
 

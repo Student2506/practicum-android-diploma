@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.search.presentation.ui
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -121,19 +122,18 @@ internal class SearchFragment : Fragment() {
         }
 
         vacancyListViewModel.enableIconLiveData.observe(viewLifecycleOwner) { enable ->
-            val filterOnDrawable = AppCompatResources.getDrawable(
-                requireContext(),
-                ru.practicum.android.diploma.ui.R.drawable.search_filter_on_state
-            )
-            val filterOffDrawable = AppCompatResources.getDrawable(
-                requireContext(),
-                ru.practicum.android.diploma.ui.R.drawable.filter
-            )
-            if (enable) {
-                binding.filter.setImageDrawable(filterOnDrawable)
+            val filterDrawable = if (enable) {
+                AppCompatResources.getDrawable(
+                    requireContext(),
+                    ru.practicum.android.diploma.ui.R.drawable.search_filter_on_state
+                )
             } else {
-                binding.filter.setImageDrawable(filterOffDrawable)
+                AppCompatResources.getDrawable(
+                    requireContext(),
+                    ru.practicum.android.diploma.ui.R.drawable.filter
+                )
             }
+            binding.filter.setImageDrawable(filterDrawable)
         }
 
         binding.filter.setOnClickListener {

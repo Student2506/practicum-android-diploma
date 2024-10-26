@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.search.presentation.ui
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

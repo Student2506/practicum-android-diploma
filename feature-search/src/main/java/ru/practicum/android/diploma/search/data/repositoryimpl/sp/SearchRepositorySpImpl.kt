@@ -8,7 +8,19 @@ import ru.practicum.android.diploma.search.domain.repository.SearchRepositorySp
 internal class SearchRepositorySpImpl(
     private val filterSp: FilterSp
 ) : SearchRepositorySp {
-    override fun getDataFilter(): FilterSearch {
+    override suspend fun getDataFilter(): FilterSearch {
         return SearchMappers.map(filterSp.getDataFilter())
+    }
+
+    override suspend fun isForceSearchEnabled(): Boolean {
+        return filterSp.isForceSearchEnabled()
+    }
+
+    override suspend fun dropForceSearch() {
+        return filterSp.disableForceSearch()
+    }
+
+    override suspend fun getDataFilterBuffer(): FilterSearch {
+        return SearchMappers.map(filterSp.getDataFilterBuffer())
     }
 }

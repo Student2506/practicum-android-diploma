@@ -19,8 +19,8 @@ internal object SearchMappers {
                     id = branchOfProfession?.id,
                     name = branchOfProfession?.name
                 ),
-                expectedSalary = expectedSalary,
-                doNotShowWithoutSalary = doNotShowWithoutSalary
+                expectedSalary = expectedSalary ?: "",
+                doNotShowWithoutSalary = doNotShowWithoutSalary,
             )
         }
     }

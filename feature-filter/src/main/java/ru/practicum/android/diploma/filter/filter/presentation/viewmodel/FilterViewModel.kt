@@ -18,10 +18,6 @@ internal class FilterViewModel(
     private var _newSettingsFilterLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     val newSettingsFilterLiveData: LiveData<Boolean> = _newSettingsFilterLiveData
 
-    init {
-        copyDataFilterInDataFilterBuffer()
-    }
-
     fun copyDataFilterInDataFilterBuffer() {
         viewModelScope.launch {
             filterSPInteractor.copyDataFilterInDataFilterBuffer()
@@ -80,6 +76,18 @@ internal class FilterViewModel(
     fun clearDataFilterAll() {
         viewModelScope.launch {
             filterSPInteractor.clearDataFilterAll()
+        }
+    }
+
+    fun setFilterSearch() {
+        viewModelScope.launch {
+            filterSPInteractor.setForceSearch()
+        }
+    }
+
+    fun dropFilterSearch() {
+        viewModelScope.launch {
+            filterSPInteractor.dropForceSearch()
         }
     }
 

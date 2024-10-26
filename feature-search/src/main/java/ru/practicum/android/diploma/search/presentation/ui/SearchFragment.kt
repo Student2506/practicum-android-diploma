@@ -73,21 +73,21 @@ internal class SearchFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
-
+        vacancyListViewModel.dropForceSearch()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        vacancyListViewModel.initQueryFilter()
+
         searchBarSetup()
 
         recyclerSetup()
-
-        setFilterIcon()
 
         vacancyListViewModel.screenStateLiveData.observe(viewLifecycleOwner) { state: SearchScreenState ->
             updateUI(state)
@@ -114,6 +114,27 @@ internal class SearchFragment : Fragment() {
             }
         }
 
+        vacancyListViewModel.forceSearchLiveData.observe(viewLifecycleOwner) { searchRequired ->
+            if (searchRequired && binding.searchBar.text.isNotEmpty()) {
+                debouncedSearch(binding.searchBar.text.toString())
+            }
+        }
+
+        vacancyListViewModel.enableIconLiveData.observe(viewLifecycleOwner) { enable ->
+            val filterDrawable = if (enable) {
+                AppCompatResources.getDrawable(
+                    requireContext(),
+                    ru.practicum.android.diploma.ui.R.drawable.search_filter_on_state
+                )
+            } else {
+                AppCompatResources.getDrawable(
+                    requireContext(),
+                    ru.practicum.android.diploma.ui.R.drawable.filter
+                )
+            }
+            binding.filter.setImageDrawable(filterDrawable)
+        }
+
         binding.filter.setOnClickListener {
             navigate.navigateTo(NavigateEventState.ToFilter)
         }
@@ -121,14 +142,6 @@ internal class SearchFragment : Fragment() {
         binding.vacancyRecycler.setOnClickListener {
             requireContext().closeKeyBoard(binding.searchBar)
         }
-    }
-
-    private fun setFilterIcon() {
-        val filterOnDrawable = AppCompatResources.getDrawable(
-            requireContext(),
-            ru.practicum.android.diploma.ui.R.drawable.search_filter_on_state
-        )
-        if (vacancyListViewModel.checkFilterState()) binding.filter.setImageDrawable(filterOnDrawable)
     }
 
     private fun recyclerSetup() {
@@ -152,11 +165,19 @@ internal class SearchFragment : Fragment() {
 
     private fun searchBarSetup() {
         binding.searchBar.doOnTextChanged { text, _, _, _ ->
+
+            if (binding.searchBar.hasFocus()) {
+                localVacancyList.clear()
+                val textSearch = text.toString()
+                debouncedSearch(textSearch)
+                if (textSearch.isEmpty()) {
+                    vacancyListViewModel.emptyList()
+                }
+            }
+
             if (text?.isNotEmpty() == true) {
                 binding.clearSearchIcon.isVisible = true
                 binding.searchBarLoupeIcon.isVisible = false
-                localVacancyList = ArrayList()
-                debouncedSearch(text.toString())
             } else {
                 binding.clearSearchIcon.isVisible = false
                 binding.searchBarLoupeIcon.isVisible = true
